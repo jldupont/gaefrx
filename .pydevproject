@@ -57,5 +57,6 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/${PROJECT_DIR_NAME}/src_common</path>
 <path>/${PROJECT_DIR_NAME}/app/api/api</path>
+<path>/${PROJECT_DIR_NAME}/src_ext</path>
 </pydev_pathproperty>
 </pydev_project>
