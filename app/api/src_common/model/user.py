@@ -6,24 +6,19 @@ Created on Jun 24, 2015
 
 from google.appengine.ext import ndb
 
-from pyrbac import Resource
-
-class DbResource(Resource, ndb.Model):
-    '''
-    Generic Datastore Resource
-    
-    We use as a base the class 'Resource' from pyrbac
-     in order to enforce access control 
-    '''
-    created_by       = ndb.KeyProperty()
-    last_modified_by = ndb.KeyProperty()
-    date_created     = ndb.DateTimeProperty(auto_now_add=True)
-    date_accessed    = ndb.DateTimeProperty(auto_now=True)
-    suspended        = ndb.BooleanProperty(default=False)
+from custom import DbResource, DomainKeyProperty, RolesProperty #UserKeyProperty
 
 
 class User(DbResource):
     '''
-    The generic User class
+    The User datastore model
+    
+    A user can only belong to 1 domain
     '''
+    domain = DomainKeyProperty()
+    
+    name_first = ndb.StringProperty(default='')
+    name_last  = ndb.StringProperty(default='')
+
+    roles = RolesProperty(default=[])
     
