@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Test Runner
+#
+python ./tools/test_runner.py $GOOGLE_APPENGINE tests
