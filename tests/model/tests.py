@@ -40,14 +40,39 @@ class Test(unittest.TestCase):
         self.testbed.deactivate()
 
 
-    def testRolesProperty(self):
+    def testRolesProperty1(self):
+        '''
+        Just test the custom property
+        '''
+        roles = [Admin, Guest]
         
+        te = TestEntity()
+        te.roles = roles
+        
+        self.assertTrue(Admin in te.roles)
+        self.assertTrue(Guest in te.roles)
+
+
+    def testRolesProperty2(self):
+        '''
+        Test the serialization / deserialization capability of the custom property
+        '''
         roles = [Admin, Guest]
         
         te = TestEntity()
         te.roles = roles
         
         te.put()
+        
+        entities = TestEntity.query().fetch(2)
+        
+        self.assertEqual(1, len(entities))
+        
+        te2 = entities[0]
+        
+        self.assertTrue(Admin in te2.roles)
+        self.assertTrue(Guest in te2.roles)
+        
         
 
 
