@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Development Server Runner
+#
+# @author: Jean-Lou Dupont
+#
+cd app && python $GOOGLE_APPENGINE/dev_appserver.py app.yaml dispatch.yaml api/api.yaml 

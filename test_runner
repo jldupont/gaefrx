@@ -2,4 +2,6 @@
 #
 # Test Runner
 #
+# @author: Jean-Lou Dupont
+#
 python ./tools/test_runner.py $GOOGLE_APPENGINE tests
