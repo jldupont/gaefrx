@@ -13,6 +13,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+#
+# MODIFIED BY Jean-Lou Dupont - 24 June 2015
+#
+
 # [START runner]
 import optparse
 import os
@@ -64,6 +68,13 @@ if __name__ == '__main__':
         sys.exit(1)
     SDK_PATH = args[0]
     TEST_PATH = args[1]
+    
+    dn = os.path.dirname
+    two_dirs_up = dn(dn(__file__))
+    
+    sys.path.insert(0, os.path.join(two_dirs_up,'src_common'))
+    sys.path.insert(0, os.path.join(two_dirs_up,'src_ext'))
+    
     main(SDK_PATH, TEST_PATH)
 
 # [END runner]

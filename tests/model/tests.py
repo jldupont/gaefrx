@@ -5,6 +5,16 @@ Created on Jun 24, 2015
 '''
 import unittest
 
+from google.appengine.ext import ndb
+
+from pyrbac import Admin, Guest
+from gaefrx.model.custom import RolesProperty
+
+
+class TestEntity(ndb.Model):
+    
+    roles = RolesProperty()
+
 
 class Test(unittest.TestCase):
 
@@ -17,8 +27,13 @@ class Test(unittest.TestCase):
         pass
 
 
-    def testName(self):
-        pass
+    def testRolesProperty(self):
+        
+        roles = [Admin, Guest]
+        
+        te = TestEntity()
+        te.roles = roles
+        
 
 
 if __name__ == "__main__":
