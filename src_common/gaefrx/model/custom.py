@@ -7,10 +7,11 @@ Created on Jun 24, 2015
 
 @author: jldupont
 '''
+import json
 
 from google.appengine.ext import ndb
 
-from pyrbac import Resource, Role, roles_class_to_name_list
+from pyrbac import Resource, Role, roles_class_to_name_list, roles_class_from_name_list
 
 
 class DbResource(Resource, ndb.Model):
@@ -50,8 +51,13 @@ class RolesProperty(ndb.StringProperty):
         
     
     def _to_base_type(self, value):
-        return roles_class_to_name_list(value)
+        names_list = roles_class_to_name_list(value)
+        return json.dumps(names_list)
     
     def _from_base_type(self, value):
-        raise Exception('todo')
+        '''
+        We expect to be receiving a JSON list of strings
+        '''
+        names_list = json.loads(value)
+        return roles_class_from_name_list(names_list) 
     

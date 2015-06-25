@@ -6,6 +6,7 @@ Created on Jun 24, 2015
 import unittest
 
 from google.appengine.ext import ndb
+from google.appengine.ext import testbed
 
 from pyrbac import Admin, Guest
 from gaefrx.model.custom import RolesProperty
@@ -20,11 +21,23 @@ class Test(unittest.TestCase):
 
 
     def setUp(self):
-        pass
+        self.testbed = testbed.Testbed()
+        
+        # Then activate the testbed, which prepares the service stubs for use.
+        self.testbed.activate()
+        
+        # Next, declare which service stubs you want to use.
+        self.testbed.init_datastore_v3_stub()
+        self.testbed.init_memcache_stub()
+        # Clear ndb's in-context cache between tests.
+        # This prevents data from leaking between tests.
+        # Alternatively, you could disable caching by
+        # using ndb.get_context().set_cache_policy(False)
+        ndb.get_context().clear_cache()        
 
 
     def tearDown(self):
-        pass
+        self.testbed.deactivate()
 
 
     def testRolesProperty(self):
@@ -33,6 +46,8 @@ class Test(unittest.TestCase):
         
         te = TestEntity()
         te.roles = roles
+        
+        te.put()
         
 
 
