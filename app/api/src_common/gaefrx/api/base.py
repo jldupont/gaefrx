@@ -8,12 +8,21 @@ import webapp2
 
 from gaefrx.excepts import BadRequestError
 
-class BaseApi(webapp2.RequestHandler):
+class _RootApi(webapp2.RequestHandler):
     '''
     The base class which should be used by API handlers
     '''
     
     HTTP_VERBS = ['get', 'post', 'put', 'delete', 'head', 'options']
+    
+    
+    def _normalize_headers(self):
+        """
+        All Headers and Cookies keys normalized to lowercase
+        """
+        
+        self.ncookies=dict((k.lower(), v) for k, v in self.request.cookies.iteritems())
+        self.nheaders=dict((k.lower(), v) for k, v in self.request.headers.iteritems())
     
     def __getattr__(self, verb):
         '''
@@ -37,9 +46,7 @@ class BaseApi(webapp2.RequestHandler):
         Dispatches to the verb handler
          using the pattern 'h$verb'        
         '''
-        handler=getattr(self, "h%s" % verb)
-        if handler is None:
-            raise BadRequestError("unsupported method: %s" % verb)
+        self._normalize_headers()
         
         try:
             ##
@@ -55,7 +62,7 @@ class BaseApi(webapp2.RequestHandler):
             resp = {}
             code = 200
             
-            raw_resp, created, more, cursor = handler(*p)
+            raw_resp, created, more, cursor = self._dispatcher(verb, *p)
             
             if created:
                 code = 201
@@ -63,7 +70,8 @@ class BaseApi(webapp2.RequestHandler):
             if more:
                 resp['cursor'] = cursor
             
-            resp['data'] = raw_resp
+            if raw_resp is not None:
+                resp['data'] = raw_resp
             
             self._generate_response(code, resp)
             
@@ -91,11 +99,67 @@ class BaseApi(webapp2.RequestHandler):
         '''
         if response_object is not None:
             
-            self.response.headers['Content-Type'] = "application/json"
-            json_repr = json.dumps(response_object)
-            self.response.out.write(json_repr)
+            ##
+            ## We expect a non-empty dict
+            ##
+            if len(response_object) > 0:
+                self.response.headers['Content-Type'] = "application/json"
+                json_repr = json.dumps(response_object)
+                self.response.out.write(json_repr)
             
         self.response.set_status(status_code)
 
 
+
+
+class BaseApi(webapp2.RequestHandler):
+    '''
+    The base class which should be used by API handlers
+    '''
+    
+    def setup(self):
+        '''
+        This method can be used to process the request
+         before dispatching to the handler.
+         
+        This can be useful for constructing a User instance
+         with the request headers, as example.
+        '''
+    
+    def _dispatcher(self, verb, *p):
+        
+        handler=getattr(self, "h%s" % verb)
+        if handler is None:
+            raise BadRequestError("unsupported method: %s" % verb)
+        
+        self.setup()
+        return handler(*p)
+    
+    def hget(self, *p):
+        """
+        The default 'GET' verb
+        """
+        ######  resp, created, more,  cursor
+        return (None, False,   False, None)
+
+    def hpost(self, *p):
+        """
+        The default 'POST' verb
+        """
+        ######  resp, created, more,  cursor
+        return (None, False,   False, None)
+
+    def hput(self, *p):
+        """
+        The default 'PUT' verb
+        """
+        ######  resp, created, more,  cursor
+        return (None, False,   False, None)
+
+    def hdelete(self, *p):
+        """
+        The default 'DELETE' verb
+        """
+        ######  resp, created, more,  cursor
+        return (None, False,   False, None)
 
