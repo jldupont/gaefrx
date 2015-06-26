@@ -8,8 +8,10 @@ import webapp2
 
 import setup #@UnusedImport
 
+from gaefrx.api import BaseApi
 
-class RouterApp(webapp2.RequestHandler):
+
+class RouterApp(BaseApi):
     
     def get(self, *p):
         '''
