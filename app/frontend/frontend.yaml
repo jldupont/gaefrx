@@ -1,0 +1,44 @@
+application: gaefrx
+module: frontend
+version: v1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+
+handlers:
+
+- url: /
+  static_files: dist/index.html
+  upload: dist/index.html
+  secure: always
+
+- url: /sw-import.js
+  static_files: dist/sw-import.js
+  upload: dist/sw-import.js
+  secure: always
+
+- url: /precache.json
+  static_files: dist/precache.json
+  upload: dist/precache.json
+  secure: always
+  
+- url: /styles
+  static_dir: dist/styles/
+  secure: always
+
+- url: /bower_components
+  static_dir: dist/bower_components/
+  secure: always
+
+- url: /scripts
+  static_dir: dist/scripts/
+  secure: always
+
+- url: /elements
+  static_dir: dist/elements/
+  secure: always
+
+- url: /sw-toolbox
+  static_dir: dist/sw-toolbox/
+  secure: always

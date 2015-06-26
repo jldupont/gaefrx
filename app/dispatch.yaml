@@ -2,3 +2,10 @@ dispatch:
   # API requests
   - url: "*/_api/*"
     module: api
+
+  - url: "*/"
+    module: frontend
+
+  - url: "*/*"
+    module: frontend
+    

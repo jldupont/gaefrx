@@ -4,4 +4,4 @@
 #
 # @author: Jean-Lou Dupont
 #
-cd app && python $GOOGLE_APPENGINE/dev_appserver.py app.yaml dispatch.yaml api/api.yaml 
+cd app && python $GOOGLE_APPENGINE/dev_appserver.py app.yaml dispatch.yaml api/api.yaml frontend/frontend.yaml
