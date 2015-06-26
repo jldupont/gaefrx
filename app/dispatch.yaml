@@ -1,4 +1,4 @@
 dispatch:
   # API requests
-  - url: "*/api/*"
+  - url: "*/_api/*"
     module: api

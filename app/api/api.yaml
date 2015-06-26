@@ -8,6 +8,11 @@ threadsafe: true
 
 handlers:
 
-- url: /(.*)
-  script: api.router.app
-  #secure: always
+- url: /_api/domain
+  script: api.api_domain.app
+  secure: always
+
+- url: /_api/domain/(.*)
+  script: api.api_domain.app
+  secure: always
+ 

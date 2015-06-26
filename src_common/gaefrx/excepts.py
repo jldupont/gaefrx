@@ -23,7 +23,7 @@ class UnrecoverableError(Exception):
     """
 
 
-class ImplementationError(Exception, UnrecoverableError):
+class ImplementationError(UnrecoverableError):
     """
     Base for all implementation errors
     
@@ -35,3 +35,7 @@ class BadRequestError(ApiError):
     The API request contains errors (e.g. malformed fields)
     '''
     
+class UnsupportedMethodError(ApiError):
+    """
+    The method is not supported
+    """

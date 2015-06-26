@@ -3,10 +3,13 @@ Created on Jun 26, 2015
 
 @author: jldupont
 '''
+import logging
 import json
 import webapp2
 
-from gaefrx.excepts import BadRequestError
+from gaefrx.api.response import ApiResponse
+from gaefrx.api import code
+from gaefrx.excepts import ImplementationError, BadRequestError, UnsupportedMethodError
 
 class _RootApi(webapp2.RequestHandler):
     '''
@@ -25,14 +28,15 @@ class _RootApi(webapp2.RequestHandler):
         self.nheaders=dict((k.lower(), v) for k, v in self.request.headers.iteritems())
     
     def __getattr__(self, verb):
-        '''
-        '''
+        
+        logging.debug("verb: %s" % verb)
+        
         _verb = verb.lower()
         
         if _verb in self.HTTP_VERBS:
             
             def _(*p):
-                return self._handler(verb, *p)
+                return self._handler(_verb, *p)
             return _
         
         ## Must respond with the default
@@ -49,34 +53,22 @@ class _RootApi(webapp2.RequestHandler):
         self._normalize_headers()
         
         try:
-            ##
-            ## resp: the response object
-            ##
-            ## created: if a resource was created as a result of this request
-            ##
-            ## more: if there are more data available through a subsequent request using the cursor
-            ##
-            ## cursor: the cursor to use for a subsequent request
-            ##         This parameter should already be 'urlsafe'
-            ##
-            resp = {}
-            code = 200
             
-            raw_resp, created, more, cursor = self._dispatcher(verb, *p)
+            maybe_response  = self._dispatcher(verb, *p)
             
-            if created:
-                code = 201
+            if not isinstance(maybe_response, ApiResponse):
+                raise ImplementationError('Expecting ApiResponse instance for %s:%s' % (self.__class__.__name__, verb))
+
+            self._generate_response(maybe_response)
+        
+        except (ImplementationError,), e:
+            self._generate_response_error(code.SERVER_ERROR, e)
             
-            if more:
-                resp['cursor'] = cursor
-            
-            if raw_resp is not None:
-                resp['data'] = raw_resp
-            
-            self._generate_response(code, resp)
-            
-        except (BadRequestError,), e:
-            self._generate_response_error(405, e)
+        except (BadRequestError, ), e:
+            self._generate_response_error(code.BAD_REQUEST, e)
+
+        except (UnsupportedMethodError, ), e:
+            self._generate_response_error(code.METHOD_NOT_ALLOWED, e)
 
 
     def _generate_response_error(self, status_code, exception):
@@ -85,34 +77,36 @@ class _RootApi(webapp2.RequestHandler):
         '''
         self.response.headers['Content-Type'] = "application/json"
 
-        response_object = {
+        response_body  = {
                             'eclass': exception.__class__.__name__
                            ,'emsg':   exception.message
                            }
         
-        self._generate_response(status_code, response_object)
+        response_object = ApiResponse(status_code, data = response_body)
+        
+        self._generate_response(response_object)
     
 
-    def _generate_response(self, status_code, response_object = None):
+    def _generate_response(self, response_object):
         '''
         Generates the response back
         '''
-        if response_object is not None:
+        assert isinstance(response_object, ApiResponse), "Expecting ApiResponse, got %s" % repr(response_object)
+        
+        ##
+        ## We expect a non-empty dict
+        ##
+        if response_object.data is not None:
+            self.response.headers['Content-Type'] = "application/json"
+            json_repr = json.dumps(response_object.data)
+            self.response.out.write(json_repr)
             
-            ##
-            ## We expect a non-empty dict
-            ##
-            if len(response_object) > 0:
-                self.response.headers['Content-Type'] = "application/json"
-                json_repr = json.dumps(response_object)
-                self.response.out.write(json_repr)
-            
-        self.response.set_status(status_code)
+        self.response.set_status(response_object.code)
 
 
 
 
-class BaseApi(webapp2.RequestHandler):
+class BaseApi(_RootApi):
     '''
     The base class which should be used by API handlers
     '''
@@ -133,33 +127,37 @@ class BaseApi(webapp2.RequestHandler):
             raise BadRequestError("unsupported method: %s" % verb)
         
         self.setup()
-        return handler(*p)
+        maybe_tuple_or_none = handler(*p)
+        
+        ##
+        ## Help for the usual case
+        ##
+        if maybe_tuple_or_none is None:
+            return (None, False,   False, None)
+        
+        return maybe_tuple_or_none
     
     def hget(self, *p):
         """
         The default 'GET' verb
         """
-        ######  resp, created, more,  cursor
-        return (None, False,   False, None)
+        raise UnsupportedMethodError('get')
 
     def hpost(self, *p):
         """
         The default 'POST' verb
         """
-        ######  resp, created, more,  cursor
-        return (None, False,   False, None)
-
+        raise UnsupportedMethodError('post')
+    
     def hput(self, *p):
         """
         The default 'PUT' verb
         """
-        ######  resp, created, more,  cursor
-        return (None, False,   False, None)
-
+        raise UnsupportedMethodError('put')
+    
     def hdelete(self, *p):
         """
         The default 'DELETE' verb
         """
-        ######  resp, created, more,  cursor
-        return (None, False,   False, None)
+        raise UnsupportedMethodError('delete')
 
