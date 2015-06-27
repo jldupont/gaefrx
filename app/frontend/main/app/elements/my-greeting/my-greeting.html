@@ -23,8 +23,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <h1 class="paper-font-display1"><span>{{greeting}}</span></h1>
     <span class="paper-font-body2">Update text to change the greeting.</span>
+    
     <!-- Listens for "input" event and sets greeting to <input>.value -->
-    <input class="paper-font-body2" value="{{greeting::input}}">
+    <input class="paper-font-body2" value="{{greeting::input}}" on-change="onChange">
   </template>
 </dom-module>
 <script>
@@ -32,10 +33,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'my-greeting',
 
+      onChange: function() {
+    	this.fire("was-changed", {});  
+      },
+      
       properties: {
         greeting: {
           type: String,
-          value: 'Welcome!',
+          value: 'Welcome Test!',
           notify: true
         }
       }

@@ -1,10 +1,27 @@
 application: gaefrx
 module: default
-version: v1
+version: v1c
 runtime: python27
 api_version: 1
 threadsafe: true
 
+skip_files:
+## The defaults
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+## The npm stuff to skip
+- ^(.*/)node_modules/(.*/)
+
+
+#
+# Include sensitive information
+#  not checked-in GIT repository
+#
+includes:
+- secrets.yaml
 
 handlers:
 
