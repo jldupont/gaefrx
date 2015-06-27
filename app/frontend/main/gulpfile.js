@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // Include Gulp & Tools We'll Use
 var gulp = require('gulp');
+var debug = require('gulp-debug');
 var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
@@ -76,6 +77,7 @@ gulp.task('images', function () {
       interlaced: true
     })))
     .pipe(gulp.dest('dist/images'))
+    .pipe(debug({title: 'unicorn:'}))
     .pipe($.size({title: 'images'}));
 });
 
