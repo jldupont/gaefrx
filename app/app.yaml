@@ -1,6 +1,6 @@
 application: gaefrx
 module: default
-version: v1c
+version: v1d
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -27,8 +27,9 @@ handlers:
 
 - url: /assets
   static_dir: assets
+  secure: always
   
 - url: /favicon.ico
   static_files: assets/favicon.ico
   upload: assets/favicon.ico
-
+  secure: always

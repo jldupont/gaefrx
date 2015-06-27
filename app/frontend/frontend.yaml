@@ -1,6 +1,6 @@
 application: gaefrx
 module: frontend
-version: v1
+version: v1b
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -25,38 +25,38 @@ handlers:
 - url: /
   static_files: main/dist/index.html
   upload: main/dist/index.html
-  #secure: always
+  secure: always
 
 - url: /sw-import.js
   static_files: main/dist/sw-import.js
   upload: main/dist/sw-import.js
-  #secure: always
+  secure: always
 
 - url: /precache.json
   static_files: main/dist/precache.json
   upload: dist/precache.json
-  #secure: always
+  secure: always
   
 - url: /styles
   static_dir: main/dist/styles/
-  #secure: always
+  secure: always
 
 - url: /bower_components
   static_dir: main/dist/bower_components/
-  #secure: always
+  secure: always
 
 - url: /scripts
   static_dir: main/dist/scripts/
-  #secure: always
+  secure: always
 
 - url: /elements
   static_dir: main/dist/elements/
-  #secure: always
+  secure: always
 
 - url: /images
   static_dir: main/dist/images/
-  #secure: always
+  secure: always
 
 - url: /sw-toolbox
   static_dir: main/dist/sw-toolbox/
-  #secure: always
+  secure: always
