@@ -15,4 +15,8 @@ handlers:
 - url: /_api/domain/(.*)
   script: api.api_domain.app
   secure: always
+
+- url: /_api/session
+  script: api.api_session.app
+  secure: always
  
