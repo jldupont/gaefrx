@@ -86,6 +86,15 @@
               </a>
 
           </paper-menu>
+          <hr>
+          
+          <div class='vertical layout center'>
+		  <google-signin id='google_signin'
+		  		label-signin="Sign-in" 
+		  		client-id="539639322649-d574vv8nilephdklbvo9jhuiba4fki1g.apps.googleusercontent.com"
+		        scopes="profile"></google-signin>
+ 			</div>
+          
       </div>
       <paper-header-panel main mode="waterfall-tall">
 
@@ -95,9 +104,11 @@
           <span class="flex"></span>
 
           <!-- Toolbar icons -->
+          <!-- 
           <paper-icon-button icon="refresh"></paper-icon-button>
           <paper-icon-button icon="search"></paper-icon-button>
-
+ 		  -->
+ 			
           <!-- Application name -->
           <div class="middle paper-font-display2 app-name">GAE Frameworx Admin</div>
 
@@ -169,6 +180,7 @@
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
+  <script src="scripts/app_signin.js"></script>
   <!-- endbuild-->
 </body>
 
