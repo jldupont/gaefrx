@@ -69,7 +69,8 @@
 
         <!-- Drawer Content -->
           <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-              <a data-route="home" href="/">
+          
+              <a data-route="home" href="/home">
                 <iron-icon icon="home"></iron-icon>
                 <span>Home</span>
               </a>
@@ -83,10 +84,6 @@
                 <iron-icon icon="account-box"></iron-icon>
                 <span>Users</span>
               </a>
-
-				<paper-spinner active></paper-spinner>
-				
-				
 
           </paper-menu>
       </div>
@@ -171,7 +168,7 @@
                  duration="6000"
                  text="Caching complete! This app will work offline.">
     </paper-toast>
-
+<!-- 
     <platinum-sw-register auto-register
                           clients-claim
                           skip-waiting
@@ -180,7 +177,7 @@
                          precache-file="precache.json">
       </platinum-sw-cache>
     </platinum-sw-register>
-
+ -->
   </template>
 
   <!-- build:js scripts/app.js -->

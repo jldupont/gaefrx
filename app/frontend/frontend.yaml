@@ -26,7 +26,7 @@ handlers:
   upload: admin/dist/index.html
   secure: always
 
-- url: /admin/
+- url: /admin
   static_dir: admin/dist/
   secure: always
 

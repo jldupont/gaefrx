@@ -16,13 +16,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   var setup = function(){
-	  
+	  /*
 	  var toggle_button = document.querySelector('#toggle-button-dialog');
 	  var test_dialog = document.querySelector('#testdialog');
 	  
 	  toggle_button.addEventListener('click', function(){
 		test_dialog.toggle();  
 	  });
+	  */
   };
   
   

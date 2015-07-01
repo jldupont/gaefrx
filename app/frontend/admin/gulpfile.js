@@ -18,7 +18,7 @@ var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var merge = require('merge-stream');
-var replace = require('gulp-replace');
+var replace_task = require('gulp-replace-task');
 var path = require('path');
 var fs = require('fs');
 var glob = require('glob');
@@ -215,9 +215,26 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
 //
 gulp.task('rewrite_src_href', function () {
   return gulp.src(['dist/*.html'])
-    .pipe(replace(/src="(.*)"/g, 'src="admin/$1"'))
-    .pipe(replace(/href="(.*)"/g, 'href="admin/$1"'))
-    .pipe(replace(/"precache.json"/g, '"admin/precache.json"'))
+  	.pipe(replace_task({
+  		patterns:[
+  		          {
+  		        	match: /src=\"(.*?)\"/g
+  		        	,replacement: 'src="admin/$1"'
+  		          }
+  		          ,
+  		          {
+    		        	match: /link rel="(.*?)" href=\"(.*?)\"/g
+    		        	,replacement: 'link rel="$1" href="admin/$2"'
+    		      }
+  		          ,
+  		          {
+  		        	match: /precache\.json/
+  		        	,replacement: 'admin/precache.json'
+  		          }
+  		          
+  		]
+  	}))
+    .pipe(debug({title: 'rewrite src href:'}))
     .pipe(gulp.dest('dist/'))
     .pipe($.size({title: 'rewrite src & href'}));
 });
