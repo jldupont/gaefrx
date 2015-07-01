@@ -214,7 +214,7 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
 // Rewrite index.html  css & script links
 //
 gulp.task('rewrite_src_href', function () {
-  return gulp.src(['dist/*.html'])
+  return gulp.src(['dist/*.html', 'dist/sw-import.js'])
   	.pipe(replace_task({
   		patterns:[
   		          {
@@ -223,10 +223,20 @@ gulp.task('rewrite_src_href', function () {
   		          }
   		          ,
   		          {
-    		        	match: /link rel="(.*?)" href=\"(.*?)\"/g
-    		        	,replacement: 'link rel="$1" href="admin/$2"'
+    		        match: /link rel="(.*?)" href=\"(.*?)\"/g
+    		        ,replacement: 'link rel="$1" href="admin/$2"'
     		      }
   		          ,
+  		          {
+  		        	match: /importScripts\(\'(.*?)\'\)/g
+  		        	,replacement: "importScripts('admin/$1')"
+  		          }
+		          ,
+  		          {
+  		        	match: /platinum-sw-register (.*?) href=\"(.*?)\"/g
+  		        	,replacement: 'platinum-sw-register $1 href="admin/$2"'
+  		          }
+		          ,  		          
   		          {
   		        	match: /precache\.json/
   		        	,replacement: 'admin/precache.json'
@@ -238,6 +248,21 @@ gulp.task('rewrite_src_href', function () {
     .pipe(gulp.dest('dist/'))
     .pipe($.size({title: 'rewrite src & href'}));
 });
+
+gulp.task('rewrite_precache', function () {
+	  return gulp.src(['dist/precache.json'])
+	  	.pipe(replace_task({
+	  		patterns:[
+	  		          {
+	  		        	match: /"(.*?)\"/g
+	  		        	,replacement: "\"admin/$1\""
+	  		          }
+	  		]
+	  	}))
+	    .pipe(debug({title: 'rewrite_precache'}))
+	    .pipe(gulp.dest('dist/'))
+	    .pipe($.size({title: 'rewrite_precache'}));
+	});
 
 
 
@@ -268,7 +293,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize', 'precache', 'rewrite_src_href',
+    'vulcanize', 'precache', 'rewrite_src_href', 'rewrite_precache',
     cb);
 });
 
