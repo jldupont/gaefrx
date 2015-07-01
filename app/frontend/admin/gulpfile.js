@@ -11,12 +11,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 // Include Gulp & Tools We'll Use
 var gulp = require('gulp');
+var debug = require('gulp-debug');
 var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var merge = require('merge-stream');
+var replace = require('gulp-replace');
 var path = require('path');
 var fs = require('fs');
 var glob = require('glob');
@@ -76,6 +78,7 @@ gulp.task('images', function () {
       interlaced: true
     })))
     .pipe(gulp.dest('dist/images'))
+    .pipe(debug({title: 'unicorn:'}))
     .pipe($.size({title: 'images'}));
 });
 
@@ -208,8 +211,22 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
   gulp.watch(['app/images/**/*'], reload);
 });
 
+// Rewrite index.html  css & script links
+//
+gulp.task('rewrite_src_href', function () {
+  return gulp.src(['dist/*.html'])
+    .pipe(replace(/src="(.*)"/g, 'src="admin/$1"'))
+    .pipe(replace(/href="(.*)"/g, 'href="admin/$1"'))
+    .pipe(replace(/"precache.json"/g, '"admin/precache.json"'))
+    .pipe(gulp.dest('dist/'))
+    .pipe($.size({title: 'rewrite src & href'}));
+});
+
+
+
 // Build and serve the output from the dist build
 gulp.task('serve:dist', ['default'], function () {
+	
   browserSync({
     notify: false,
     snippetOptions: {
@@ -234,7 +251,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize', 'precache',
+    'vulcanize', 'precache', 'rewrite_src_href',
     cb);
 });
 

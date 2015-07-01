@@ -15,6 +15,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  var setup = function(){
+	  
+	  var toggle_button = document.querySelector('#toggle-button-dialog');
+	  var test_dialog = document.querySelector('#testdialog');
+	  
+	  toggle_button.addEventListener('click', function(){
+		test_dialog.toggle();  
+	  });
+  };
+  
+  
   app.displayInstalledToast = function() {
     document.querySelector('#caching-complete').show();
   };
@@ -23,6 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
+    setup();
   });
 
   // See https://github.com/Polymer/polymer/issues/1381

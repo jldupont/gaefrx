@@ -42,9 +42,20 @@
   <!-- will be replaced with elements/elements.vulcanized.html -->
   <link rel="import" href="elements/elements.html">
   <!-- endreplace-->
+  
 </head>
 
 <body unresolved class="fullbleed layout vertical">
+
+                <paper-dialog id='testdialog' no-cancel-on-esc-key with-backdrop no-cancel-on-outside-click>
+                	<h2>Heading</h2>
+  					<p>Some content</p>
+  					<div class="buttons">
+						<paper-button dialog-dismiss>Cancel</paper-button>
+        				<paper-button dialog-confirm>Accept</paper-button>  					
+        			</div>
+				</paper-dialog>
+
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
@@ -73,6 +84,10 @@
                 <span>Users</span>
               </a>
 
+				<paper-spinner active></paper-spinner>
+				
+				
+
           </paper-menu>
       </div>
       <paper-header-panel main mode="waterfall-tall">
@@ -96,6 +111,9 @@
 
         <!-- Main Content -->
         <div class="content">
+        
+        
+        
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
@@ -134,7 +152,14 @@
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Domains</h2>
                 <p>Domain Management</p>
+                
+                <paper-button raised id='toggle-button-dialog'>Toggle Dialog</paper-button>
+                
+
               </paper-material>
+              
+
+              
             </section>
 
           </iron-pages>

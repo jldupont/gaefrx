@@ -18,6 +18,18 @@ skip_files:
 
 handlers:
 
+#
+# Production 'admin' application
+#
+- url: /admin
+  static_files: admin/dist/index.html
+  upload: admin/dist/index.html
+  secure: always
+
+- url: /admin/
+  static_dir: admin/dist/
+  secure: always
+
 
 #
 # Production 'main' application

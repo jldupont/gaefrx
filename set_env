@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# jldupont dev environment
+#
+# Use 'source set_env'
+#
+export GOOGLE_APPENGINE=~/apps/google_appengine
