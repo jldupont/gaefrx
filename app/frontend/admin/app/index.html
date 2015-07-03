@@ -77,7 +77,7 @@
                 <span>Home</span>
               </a>
 
-              <a data-route="domains" href="/domains">
+              <a data-route="domains" href="/domains" data-required-permission="domain:list" hidden>
                 <iron-icon icon="cloud"></iron-icon>
                 <span>Domains</span>
               </a>
@@ -151,7 +151,7 @@
               </paper-material>
             </section>
 
-            <section data-route="domains">
+            <section data-route="domains" data-required-permission="domain:list">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Domains</h2>
                 <p>Domain Management</p>

@@ -8,6 +8,7 @@
   var mbus = null;
   var current_user = null;
   
+  var sections = [];
  
   var setup = function(){
 	  
@@ -21,6 +22,9 @@
 		  console.log("User Signout event!");
 	  });
 	  
+	  sections = document.querySelector("[data-required-permission]");
+	  
+	  console.log(sections);
   };
   
   
