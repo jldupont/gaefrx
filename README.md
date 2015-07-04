@@ -27,6 +27,7 @@ Dependencies
   * gulp
   * bower
 * Python 2.7+
+* pyyaml (for the client bridge)
 * Nose
 
 
@@ -36,3 +37,8 @@ Uploading to Google AppEngine
 * cd gaefrx/app
 * appcfg.py update app.yaml frontend/frontend.yaml api/api.yaml
 * appcfg.py update_dispatch .
+
+Installation
+------------
+
+Use 'make install'
