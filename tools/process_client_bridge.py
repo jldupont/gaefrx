@@ -6,6 +6,16 @@
 import os
 import sys
 
+#
+# Configuration
+#
+where_to_create_files = [
+                          'app/frontend/admin/app/scripts/client_bridge.js'
+                         ,'app/frontend/main/app/scripts/client_bridge.js'
+                         ]
+
+
+## --------------------------------------------------------------
 dn = os.path.dirname
 two_dirs_up = dn(dn(__file__))
 
@@ -26,10 +36,17 @@ from pyrbac import export
 
 import gaefrx.model.roles #@UnusedImport
 
-def rbac_json_repr():
-    '''
-    Returns a JSON string representation of the defined Roles
-    '''
-    return export()
 
-print rbac_json_repr()
+template = """// This file is auto-generated
+roles = %s;
+"""
+
+script_file_contents = template % (export())
+
+for file_to_create_or_update in where_to_create_files:
+    
+    fpath = os.path.join(two_dirs_up, file_to_create_or_update)
+    hfile = open(fpath, 'w')
+    hfile.write( script_file_contents )
+    hfile.close()
+    
