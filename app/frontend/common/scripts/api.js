@@ -14,7 +14,7 @@ api.debug = false;
 
 //-------------------------------------------------------- PRIVATE parameters
 
-api._request_base = "/api/";
+api._request_base = "/_api/";
 api._current_user = {};
 api._options = {};
 
@@ -45,24 +45,67 @@ api.set_options = function(options){
 
 //-------------------------------------------------------- PRIVATE functions
 
+
+api._build_query_string = function(params) {
+	
+    var queryParts = [];
+    var param;
+    var value;
+
+    for (param in params) {
+    	
+      value = params[param];
+      param = window.encodeURIComponent(param);
+
+      if (value !== null) {
+        param += '=' + window.encodeURIComponent(value);
+      }
+
+      queryParts.push(param);
+    }
+
+    return queryParts.join('&');
+};
+
+
 /*
  * The intermediate request layer
  * 
- * @param verb
- * @param path
- * @param query_parameters
- * @param headers
- * @param body : optional when 'null'
- * @param cb_success : callback used when request is successful
- * @param cb_error   : callback used when request is unsuccessful
+ * @param context: object:
+ * 				verb: string
+ * 				path: string
+ * 				query_parameters: object
+ * 				headers: object
+ * 				json_body : optional when 'null'
+ * 				cb_success : callback used when request is successful
+ * 				cb_error   : callback used when request is unsuccessful
  */
-api._request = function(verb, path, query_parameters, headers, body, cb_success, cb_error){
+api._request = function(context){
 	
+	var qs = api._build_query_string(context.query_parameters || {});
+	var url = api._request_base + context.path;
+	
+	if (qs!="")
+		url += "?"+qs;
+	
+	context.url = url;
+	
+	return api._make_request(context);
 };
 
 /*
  * The lowest layer
  * 
+ * @param context: object
+ * 
+ *   context.cb_success   [optional]
+ *   context.cb_error     [optional]
+ *   context.cb_exception [optional]
+ *   context.headers
+ *   context.url
+ *   context.verb
+ *   context.body
+ *   
  */
 api._make_request = function(context) {
 	
@@ -101,6 +144,16 @@ api._make_request = function(context) {
     	  do_callback(context.cb_error, xhr.status, xhr.responseText);
       });
 
+      if (context.headers) {
+    	  
+          Object.keys(context.headers).forEach(function (requestHeader) {
+            xhr.setRequestHeader(
+              requestHeader,
+              context.headers[requestHeader]
+            );
+          });
+      };
+      
       xhr.open(
         context.verb || 'GET',
         context.url,
