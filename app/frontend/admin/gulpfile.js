@@ -78,7 +78,7 @@ gulp.task('images', function () {
       interlaced: true
     })))
     .pipe(gulp.dest('dist/images'))
-    .pipe(debug({title: 'unicorn:'}))
+    //.pipe(debug({title: 'unicorn:'}))
     .pipe($.size({title: 'images'}));
 });
 
@@ -118,6 +118,13 @@ gulp.task('fonts', function () {
   return gulp.src(['app/fonts/**'])
     .pipe(gulp.dest('dist/fonts'))
     .pipe($.size({title: 'fonts'}));
+});
+
+//Copy Common files
+gulp.task('copy_common', function () {
+  return gulp.src(['../common/**'])
+    .pipe(gulp.dest('app/common'))
+    .pipe($.size({title: 'copy common'}));
 });
 
 // Scan Your HTML For Assets & Optimize Them
@@ -181,7 +188,8 @@ gulp.task('precache', function (callback) {
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 // Watch Files For Changes & Reload
-gulp.task('serve', ['styles', 'elements', 'images'], function () {
+gulp.task('serve', ['copy_common', 'styles', 'elements', 'images'], function () {
+	
   browserSync({
     notify: false,
     snippetOptions: {
@@ -204,6 +212,8 @@ gulp.task('serve', ['styles', 'elements', 'images'], function () {
     }
   });
 
+  
+  gulp.watch(['../common/**/*.*'], ['copy_common', reload]);
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
@@ -290,7 +300,7 @@ gulp.task('serve:dist', ['default'], function () {
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
   runSequence(
-    ['copy', 'styles'],
+    ['copy', 'copy_common', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
     'vulcanize', 'precache', 'rewrite_src_href', 'rewrite_precache',
