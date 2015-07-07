@@ -111,6 +111,8 @@ class BaseApi(_RootApi):
     The base class which should be used by API handlers
     '''
     
+    CORS_ENABLED = True
+    
     def setup(self):
         '''
         This method can be used to process the request
@@ -133,9 +135,23 @@ class BaseApi(_RootApi):
         ## Help for the usual case
         ##
         if maybe_tuple_or_none is None:
-            return (None, False,   False, None)
+            return ApiResponse(code.SUCCESS)
         
         return maybe_tuple_or_none
+    
+    def hoptions(self):
+        '''
+        The CORS pre-flight verb
+        '''
+        
+        if self.CORS_ENABLED:
+            self.response.headers["Access-Control-Allow-Origin"] = "*"
+            self.response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, HEAD, DELETE, OPTIONS"
+            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept'
+            return ApiResponse(code.SUCCESS)
+        
+        return ApiResponse(code.METHOD_NOT_ALLOWED)
+
     
     def hget(self, *p):
         """
