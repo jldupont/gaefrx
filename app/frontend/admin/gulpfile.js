@@ -191,6 +191,7 @@ gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 gulp.task('serve', ['copy_common', 'styles', 'elements', 'images'], function () {
 	
   browserSync({
+	startPath: "/?api_port=8080",
     notify: false,
     snippetOptions: {
       rule: {
