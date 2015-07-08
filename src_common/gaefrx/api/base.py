@@ -104,7 +104,7 @@ class _RootApi(webapp2.RequestHandler):
         if self.CORS_ENABLED:
             self.response.headers["Access-Control-Allow-Origin"] = "*"
             self.response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, HEAD, DELETE, OPTIONS"
-            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Accept-Language, Accept-Encoding'
+            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, From, X-token, X-realm'
             
         self.response.set_status(response_object.code)
 

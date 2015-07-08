@@ -18,6 +18,9 @@ api._current_user = {};
 api._context = {};
 api._options = {};
 
+// we need to limit the damage that can be done through XSS
+api._url_allowed_parameters = ['port', 'debug'];
+
 //-------------------------------------------------------- PUBLIC functions
 
 /*
@@ -36,8 +39,13 @@ api.init = function(){
 	
 	// extract the parameters relevant to this module
 	_.mapObject(api._context.query, function(value, key){
-		if (key.indexOf("api")==0)
-			api._options[ key.substr("api_".length) ] = value;
+		if (key.indexOf("api")==0) {
+			var param_name = key.substr("api_".length);
+			
+			if (_.indexOf(api._url_allowed_parameters, param_name)!=-1)
+				api._options[ param_name ] = value;
+		}
+			
 	});
 	
 	// do we have a port specified for the server API ?
@@ -52,9 +60,21 @@ api.init = function(){
  *  This can be done one time at the beginning of a session
  *  
  *  @param user_details : an object containing the details
+ *    - realm
+ *    - name
+ *    - token
+ *    - email
  */
 api.set_user = function(user_details){
-  api._current_user = user_details;	
+  api._current_user = user_details || {};	
+};
+
+/*
+ *  Delete the current user
+ *  
+ */
+api.del_user = function(){
+  api._current_user = {};	
 };
 
 
@@ -85,7 +105,7 @@ api.set_options = function(options){
  * 				cb_success : callback used when request is successful
  * 				cb_error   : callback used when request is unsuccessful
  */
-api._request = function(context){
+api.request = function(context){
 	
 	var rcontext = {};
 	
@@ -101,7 +121,10 @@ api._request = function(context){
 	context.url = uri.build(rcontext);
 	
 	context.headers = {
-		'Content-Type': 'application/json'
+		'Content-Type': 'application/json',
+		'From':         api._current_user.email || null,
+		'X-realm':      api._current_user.realm || null,
+		'X-token':      api._current_user.token || null
 	};
 	
 	return api._make_request(context);
