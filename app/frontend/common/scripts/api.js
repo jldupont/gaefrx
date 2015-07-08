@@ -100,6 +100,10 @@ api._request = function(context){
 	
 	context.url = uri.build(rcontext);
 	
+	context.headers = {
+		'Content-Type': 'application/json'
+	};
+	
 	return api._make_request(context);
 };
 
@@ -154,6 +158,12 @@ api._make_request = function(context) {
     	  do_callback(context.cb_error, xhr.status, xhr.responseText);
       });
 
+      xhr.open(
+        context.verb || 'GET',
+        context.url,
+        context.async || true
+      );	
+
       if (context.headers) {
     	  
           Object.keys(context.headers).forEach(function (requestHeader) {
@@ -163,12 +173,6 @@ api._make_request = function(context) {
             );
           });
       };
-      
-      xhr.open(
-        context.verb || 'GET',
-        context.url,
-        context.async || true
-      );	
-	
+            
       xhr.send(context.body);
 };

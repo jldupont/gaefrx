@@ -101,6 +101,11 @@ class _RootApi(webapp2.RequestHandler):
             json_repr = json.dumps(response_object.data)
             self.response.out.write(json_repr)
             
+        if self.CORS_ENABLED:
+            self.response.headers["Access-Control-Allow-Origin"] = "*"
+            self.response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, HEAD, DELETE, OPTIONS"
+            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Accept-Language, Accept-Encoding'
+            
         self.response.set_status(response_object.code)
 
 
@@ -129,15 +134,15 @@ class BaseApi(_RootApi):
             raise BadRequestError("unsupported method: %s" % verb)
         
         self.setup()
-        maybe_tuple_or_none = handler(*p)
+        response = handler(*p)
         
         ##
         ## Help for the usual case
         ##
-        if maybe_tuple_or_none is None:
+        if response is None:
             return ApiResponse(code.SUCCESS)
         
-        return maybe_tuple_or_none
+        return response
     
     def hoptions(self):
         '''
@@ -145,9 +150,6 @@ class BaseApi(_RootApi):
         '''
         
         if self.CORS_ENABLED:
-            self.response.headers["Access-Control-Allow-Origin"] = "*"
-            self.response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, HEAD, DELETE, OPTIONS"
-            self.response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept'
             return ApiResponse(code.SUCCESS)
         
         return ApiResponse(code.METHOD_NOT_ALLOWED)
