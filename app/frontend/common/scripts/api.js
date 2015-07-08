@@ -3,22 +3,48 @@
  * 
  * @author: jldupont
  * 
+ * @dependency: jldupont/js-uri-toolkit
+ * 
  **/
 
 api = {};
 
 // -------------------------------------------------------- PUBLIC parameters
 
-api.debug = false;
-
 
 //-------------------------------------------------------- PRIVATE parameters
 
-api._request_base = "/_api/";
 api._current_user = {};
+api._context = {};
 api._options = {};
 
 //-------------------------------------------------------- PUBLIC functions
+
+/*
+ *  This method should be called upon initial application loading
+ *  
+ *  The initialization consists in preparing the API request context :
+ *  - Extract relevant parameters from the application URL
+ *    - api_port
+ *    - api_debug
+ *  
+ */
+api.init = function(){
+	
+	var initial_url = window.location.href;
+	api._context = uri.parse( initial_url );
+	
+	// extract the parameters relevant to this module
+	_.mapObject(api._context.query, function(value, key){
+		if (key.indexOf("api")==0)
+			api._options[ key.substr("api_".length) ] = value;
+	});
+	
+	// do we have a port specified for the server API ?
+	api._context.port = api._options.port || api._context.port;
+	
+	api._context.base = "_api/";
+};
 
 /*
  *  Setting the User related parameters
@@ -46,27 +72,6 @@ api.set_options = function(options){
 //-------------------------------------------------------- PRIVATE functions
 
 
-api._build_query_string = function(params) {
-	
-    var queryParts = [];
-    var param;
-    var value;
-
-    for (param in params) {
-    	
-      value = params[param];
-      param = window.encodeURIComponent(param);
-
-      if (value !== null) {
-        param += '=' + window.encodeURIComponent(value);
-      }
-
-      queryParts.push(param);
-    }
-
-    return queryParts.join('&');
-};
-
 
 /*
  * The intermediate request layer
@@ -74,7 +79,7 @@ api._build_query_string = function(params) {
  * @param context: object:
  * 				verb: string
  * 				path: string
- * 				query_parameters: object
+ * 				query: object
  * 				headers: object
  * 				json_body : optional when 'null'
  * 				cb_success : callback used when request is successful
@@ -82,13 +87,18 @@ api._build_query_string = function(params) {
  */
 api._request = function(context){
 	
-	var qs = api._build_query_string(context.query_parameters || {});
-	var url = api._request_base + context.path;
+	var rcontext = {};
 	
-	if (qs!="")
-		url += "?"+qs;
+	// we grab the basic URL components from the initial context
+	rcontext.scheme = api._context.scheme; 
+	rcontext.host   = api._context.host;
+	rcontext.port   = api._context.port;
 	
-	context.url = url;
+	// we inject the path and query string
+	rcontext.path  = api._context.base + context.path;
+	rcontext.query = context.query;
+	
+	context.url = uri.build(rcontext);
 	
 	return api._make_request(context);
 };

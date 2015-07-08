@@ -9,7 +9,7 @@
     "page": "visionmedia/page.js#~1.6.3",
     "google-signin": "GoogleWebComponents/google-signin#1.0.3",
     "jsrbac": "jldupont/jsrbac#0.0.1",
-    "js-uri-toolkit": "jldupont/js-uri-toolkit#0.0.2",
+    "js-uri-toolkit": "jldupont/js-uri-toolkit#0.0.4",
     "underscore": "underscore#1.8.3"
   },
   "devDependencies": {
