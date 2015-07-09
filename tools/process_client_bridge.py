@@ -6,6 +6,7 @@
 import os
 import sys
 
+print "Generating client_bridge.js ..."
 #
 # Configuration
 #
@@ -50,3 +51,4 @@ for file_to_create_or_update in where_to_create_files:
     hfile.write( script_file_contents )
     hfile.close()
     
+print "Success !"
