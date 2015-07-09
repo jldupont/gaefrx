@@ -214,7 +214,7 @@ gulp.task('serve', ['copy_common', 'styles', 'elements', 'images'], function () 
   });
 
   
-  gulp.watch(['../common/**/*.*'], ['copy_common', reload]);
+  gulp.watch(['../common/**/*'], ['copy_common', reload]);
   gulp.watch(['app/**/*.html'], reload);
   gulp.watch(['app/styles/**/*.css'], ['styles', reload]);
   gulp.watch(['app/elements/**/*.css'], ['elements', reload]);
