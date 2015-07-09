@@ -31,7 +31,7 @@ class User(DbResource):
     
     A user can only belong to 1 domain
     '''
-    domain = DomainKeyProperty()
+    domain = DomainKeyProperty(default = None)
     
     name_first = ndb.StringProperty(default='')
     name_last  = ndb.StringProperty(default='')

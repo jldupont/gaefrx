@@ -39,3 +39,20 @@ class UnsupportedMethodError(ApiError):
     """
     The method is not supported
     """
+    
+class DatastoreError(Exception, MaybeRecoverableError):
+    '''
+    A generic datastore exception
+    '''
+
+class ExistsError(ApiError):
+    '''
+    An entity already exists
+    
+    Usually raised upon creation attempt of an entity
+    '''
+
+class InvalidParameterValueError(ApiError):
+    '''
+    An invalid parameter value was used
+    '''
