@@ -14,12 +14,23 @@ class MetaIsp(type):
         newclass=super(MetaIsp, cls).__new__(cls, future_class_name, future_class_parents, future_class_attr)
         
         if newclass.__name__ != 'BaseIsp':
-            
-            name = cls.__name__.lower()
-            newclass.name = name
-            cls.isps[name] = newclass
-    
+            cls._register_class(newclass)
         return newclass
+    
+    @classmethod
+    def _register_class(cls, klass):
+        '''
+        Register a BaseISP subclass
+        
+        This method can be used for mock based tests
+        
+        @return klass
+        '''
+        assert issubclass(klass, BaseIsp), "Expected subclass of BaseIsp, got: %s" % repr(klass)
+        name = klass.__name__.lower()
+        cls.isps[name] = klass
+        return klass
+        
 
 class BaseIsp():
     
