@@ -6,6 +6,7 @@ Created on Jun 26, 2015
 @author: jldupont
 '''
 
+
 class ApiError(Exception):
     """
     Base for the whole API
@@ -55,4 +56,15 @@ class ExistsError(ApiError):
 class InvalidParameterValueError(ApiError):
     '''
     An invalid parameter value was used
+    '''
+
+class RemoteServiceError(ApiError, MaybeRecoverableError):
+    '''
+    E.g. google
+    '''
+
+class NotFoundError(ApiError, UnrecoverableError):
+    '''
+    Something was not found 
+     e.g. an entity in the datastore
     '''

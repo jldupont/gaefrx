@@ -75,4 +75,23 @@ def update():
 def delete():
     '''
     '''
+   
+#
+# =====================
+# 
+
+def verify_identity_authentication(realm, email, token):
+    '''
+    Verify with the Identity Service Provider
+     the validity of the authentication parameters
+     
+    @param realm : a supported realm (e.g. google, ... )
+    @param email
+    @param token : a realm specific authentication token
+    
+    @return True | False
+    @raise InvalidParameterValueError
+    @raise RemoteServiceError
+    '''
+    
     
