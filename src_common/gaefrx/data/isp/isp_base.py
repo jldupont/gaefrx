@@ -27,8 +27,16 @@ class MetaIsp(type):
         @return klass
         '''
         assert issubclass(klass, BaseIsp), "Expected subclass of BaseIsp, got: %s" % repr(klass)
+       
         name = klass.__name__.lower()
-        cls.isps[name] = klass
+        
+        if not name.startswith('isp'):
+            raise Exception('Providers must start with "Isp"')
+        
+        realm_name = name[3:]
+        
+        cls.isps[realm_name] = klass
+        klass.name = realm_name
         return klass
         
 

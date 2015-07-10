@@ -41,7 +41,7 @@ class UnsupportedMethodError(ApiError):
     The method is not supported
     """
     
-class DatastoreError(Exception, MaybeRecoverableError):
+class DatastoreError(MaybeRecoverableError):
     '''
     A generic datastore exception
     '''
@@ -58,12 +58,12 @@ class InvalidParameterValueError(ApiError):
     An invalid parameter value was used
     '''
 
-class RemoteServiceError(ApiError, MaybeRecoverableError):
+class RemoteServiceError(MaybeRecoverableError):
     '''
     E.g. google
     '''
 
-class NotFoundError(ApiError, UnrecoverableError):
+class NotFoundError(UnrecoverableError):
     '''
     Something was not found 
      e.g. an entity in the datastore

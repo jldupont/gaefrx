@@ -52,12 +52,12 @@ def create(realm, email, token, user_id = '', name_first = '', name_last = ''):
     assert isinstance(email, basestring), 'Expected string, got: %s' % repr(email)
     assert isinstance(token, basestring), 'Expected string, got: %s' % repr(token)
     
-    if realm not in FederatedIdentity.realm:
+    if realm not in FederatedIdentity.SUPPORTED_REALMS:
         raise InvalidParameterValueError('realm')
     
     u = User(name_first = name_first, name_last = name_last
-             ,email = email
-             ,identities = FederatedIdentity(realm = realm, user_id = user_id, email = email, token = token)
+             ,email = [email]
+             ,identities = [FederatedIdentity(realm = realm, user_id = user_id, email = email, token = token)]
              )
     try:
         u.put()

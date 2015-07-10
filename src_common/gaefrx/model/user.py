@@ -19,7 +19,10 @@ class FederatedIdentity(ndb.Model):
     
     The properties 'user_id' and 'token' shall be considered opaque 
     '''
-    realm      = ndb.StringProperty(choices = ['google', ])
+    
+    SUPPORTED_REALMS = ['google', ]
+    
+    realm      = ndb.StringProperty(choices = SUPPORTED_REALMS)
     user_id    = ndb.StringProperty(default = '')
     email      = ndb.StringProperty(default = '')
     token      = ndb.StringProperty(default = '')
@@ -41,3 +44,19 @@ class User(DbResource):
 
     roles = RolesProperty(default=[])
     
+    def get_identity_by_realm(self, realm):
+        '''
+        @return FederatedIdentity | None
+        '''
+        assert isinstance(realm, basestring), "Expected string, got: %s" % repr(realm)
+        
+        realm = realm.lower()
+        
+        for ident in self.identities:
+            _realm = ident.realm.lower()
+            if _realm == realm:
+                return ident
+            
+        return None
+            
+            
