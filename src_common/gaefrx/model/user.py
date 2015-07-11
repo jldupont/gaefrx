@@ -22,10 +22,10 @@ class FederatedIdentity(ndb.Model):
     
     SUPPORTED_REALMS = ['google', ]
     
-    realm      = ndb.StringProperty(choices = SUPPORTED_REALMS)
+    realm      = ndb.StringProperty(choices = SUPPORTED_REALMS, required = True)
     user_id    = ndb.StringProperty(default = '')
-    email      = ndb.StringProperty(default = '')
-    token      = ndb.StringProperty(default = '')
+    email      = ndb.StringProperty(required = True)
+    token      = ndb.StringProperty(required = True)
     
 
 class User(DbResource):

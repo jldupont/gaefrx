@@ -11,7 +11,9 @@ from google.appengine.ext import testbed
 import gaefrx.data.isp as isp
 import gaefrx.data.user as user
 
-class Test(unittest.TestCase):
+from gaefrx.excepts import BadRequestError, NotFoundError
+
+class Test1(unittest.TestCase):
 
 
     def setUp(self):
@@ -71,6 +73,76 @@ class Test(unittest.TestCase):
         
         uf_i3 = uf.get_identity_by_realm('FACEBOOK')
         self.assertEqual(uf_i3, None)
+
+
+class Test2(unittest.TestCase):
+
+
+    def setUp(self):
+        self.testbed = testbed.Testbed()
+        
+        # Then activate the testbed, which prepares the service stubs for use.
+        self.testbed.activate()
+        
+        # Next, declare which service stubs you want to use.
+        self.testbed.init_datastore_v3_stub()
+        self.testbed.init_memcache_stub()
+        # Clear ndb's in-context cache between tests.
+        # This prevents data from leaking between tests.
+        # Alternatively, you could disable caching by
+        # using ndb.get_context().set_cache_policy(False)
+        ndb.get_context().clear_cache()        
+
+        self.email = 'email@test.com'
+        self.token = '6666'
+
+        u = user.User(email = [self.email],
+                      identities = [user.FederatedIdentity(
+                                                           email = self.email
+                                                           ,token = self.token
+                                                           ,realm = 'google'
+                                                           )]
+                      )
+
+        u.put()
+
+
+    def tearDown(self):
+        self.testbed.deactivate()
+
+
+    def testEnsureAuth1(self):
+
+        result = user.ensure_authentication({
+                                              'email':  self.email
+                                             ,'token':  self.token
+                                             ,'realm':  'google'
+                                             })
+        
+        self.assertTrue(result, 'Expecting True')
+
+    def testEnsureAuth2(self):
+
+        def raises():
+            user.ensure_authentication({
+                                                  'email':  None
+                                                 ,'token':  self.token
+                                                 ,'realm':  'google'
+                                                 })
+        
+        self.assertRaises(BadRequestError, raises)
+
+    def testEnsureAuth3(self):
+
+        def raises():
+            user.ensure_authentication({
+                                                  'email':  'unknown_email'
+                                                 ,'token':  self.token
+                                                 ,'realm':  'google'
+                                                 })
+        
+        self.assertRaises(NotFoundError, raises)
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

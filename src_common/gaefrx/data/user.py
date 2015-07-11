@@ -7,7 +7,41 @@ Created on Jul 9, 2015
 '''
 
 from gaefrx.model.user import User, FederatedIdentity
-from gaefrx.excepts import DatastoreError, InvalidParameterValueError #, ExistsError
+from gaefrx.excepts import DatastoreError, InvalidParameterValueError
+from gaefrx.excepts import BadRequestError, NotFoundError
+
+
+def ensure_authentication(context):
+    """
+    Verifies authentication status
+    
+    @param context: { name, email, token, realm }
+    
+    @return True | False
+    @raise BadRequestError, NotFoundError
+    """
+    
+    email = context.get('email', None)
+    if email is None:
+        raise BadRequestError('missing email')
+    
+    u = get_by_email(email)
+    if u is None:
+        raise NotFoundError('user')
+    
+    realm = context.get('realm', None)
+    if realm is None:
+        raise BadRequestError('realm')
+    
+    idp = u.get_identity_by_realm(realm)
+    if idp is None:
+        raise NotFoundError('realm identity')
+    
+    if idp.token == '' or idp.token is None:
+        return False
+    
+    return idp.token == context.get('token', None)
+    
 
 
 def get_by_email(email):

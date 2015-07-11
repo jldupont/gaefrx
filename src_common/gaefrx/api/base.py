@@ -3,13 +3,41 @@ Created on Jun 26, 2015
 
 @author: jldupont
 '''
-import logging
+#import logging
 import json
 import webapp2
 
 from gaefrx.api.response import ApiResponse
 from gaefrx.api import code
 from gaefrx.excepts import ImplementationError, BadRequestError, UnsupportedMethodError
+from gaefrx.excepts import UnauthorizedError
+
+from gaefrx.data.user import ensure_authentication
+
+
+
+def requires_auth(method):
+    '''
+    Decorator - check authentication
+    
+    Should only be used in a _RootApi subclass
+    
+    @raise UnauthorizedError
+    @raise BadRequestError
+    @raise NotFoundError
+    '''
+    def _(this, *pargs):
+        
+        ctx = this.get_context()
+        if not ensure_authentication(ctx):
+            raise UnauthorizedError() 
+        
+        return method(this, *pargs)
+
+    return _
+
+
+
 
 class _RootApi(webapp2.RequestHandler):
     '''
@@ -23,13 +51,24 @@ class _RootApi(webapp2.RequestHandler):
         """
         All Headers and Cookies keys normalized to lowercase
         """
-        
         self.ncookies=dict((k.lower(), v) for k, v in self.request.cookies.iteritems())
         self.nheaders=dict((k.lower(), v) for k, v in self.request.headers.iteritems())
     
+    def get_context(self):
+        '''
+        Return the request context
+         i.e. realm, user name, email and token
+         
+        @return {...}
+        '''
+        return {
+                 'name':  self.nheaders.get('x-name',  None)
+                ,'email': self.nheaders.get('from',    None)
+                ,'token': self.nheaders.get('x-token', None)
+                ,'realm': self.nheaders.get('x-realm', None)
+                }
+    
     def __getattr__(self, verb):
-        
-        logging.debug("verb: %s" % verb)
         
         _verb = verb.lower()
         

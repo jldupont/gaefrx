@@ -68,3 +68,9 @@ class NotFoundError(UnrecoverableError):
     Something was not found 
      e.g. an entity in the datastore
     '''
+    
+class UnauthorizedError(ApiError):
+    '''
+    The request requires authentication
+    '''
+    
