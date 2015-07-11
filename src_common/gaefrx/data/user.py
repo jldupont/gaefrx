@@ -17,7 +17,7 @@ def ensure_authentication(context):
     
     @param context: { name, email, token, realm }
     
-    @return True | False
+    @return (True | False, user | None)
     @raise BadRequestError, NotFoundError
     """
     
@@ -38,9 +38,9 @@ def ensure_authentication(context):
         raise NotFoundError('realm identity')
     
     if idp.token == '' or idp.token is None:
-        return False
+        return (False, u)
     
-    return idp.token == context.get('token', None)
+    return (idp.token == context.get('token', None), u)
     
 
 

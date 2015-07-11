@@ -113,7 +113,7 @@ class Test2(unittest.TestCase):
 
     def testEnsureAuth1(self):
 
-        result = user.ensure_authentication({
+        result, _ = user.ensure_authentication({
                                               'email':  self.email
                                              ,'token':  self.token
                                              ,'realm':  'google'

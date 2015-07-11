@@ -29,10 +29,13 @@ def requires_auth(method):
     def _(this, *pargs):
         
         ctx = this.get_context()
-        if not ensure_authentication(ctx):
+        
+        result, user = ensure_authentication(ctx) 
+        
+        if not result:
             raise UnauthorizedError() 
         
-        return method(this, *pargs)
+        return method(this, user, *pargs)
 
     return _
 
