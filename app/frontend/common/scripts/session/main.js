@@ -18,12 +18,22 @@
 	  
 	  var mbus = document.querySelector("#mbus");
 	
-	  mbus.addEventListener('X-user_signin', function(){
+	  mbus.addEventListener('X-user_signin', function(data){
+		  current_user = data;
+		  
+		  api.session_create({
+			  cb_success: function(_, status, response) {
+				  console.log("Session Create Success: ", response);
+			  },
+			  cb_error: function(_, status, response) {
+				  console.log("Session Create Error: ", response);
+			  }
+		  });
 		  
 	  });
 
-	  mbus.addEventListener('X-user_signout', function(){
-		  
+	  mbus.addEventListener('X-user_signout', function(data){
+		  current_user = {};
 	  });
 	  
 	  
