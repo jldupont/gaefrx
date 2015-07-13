@@ -20,13 +20,6 @@ skip_files:
 - ^(.*/)node_modules/(.*/)
 
 
-#
-# Include sensitive information
-#  not checked-in GIT repository
-#
-includes:
-- secrets.yaml
-
 handlers:
 
 - url: /assets

@@ -15,9 +15,6 @@ skip_files:
 ## The npm stuff to skip
 - ^(.*/)node_modules/(.*/)
 
-includes:
-- ../secrets.yaml
-
 
 handlers:
 
