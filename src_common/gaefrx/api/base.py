@@ -8,7 +8,8 @@ import json
 import webapp2
 
 from gaefrx.api.response import ApiResponse
-from gaefrx.api import code
+import gaefrx.api.code as code 
+
 from gaefrx.excepts import ImplementationError, BadRequestError, UnsupportedMethodError
 from gaefrx.excepts import UnauthorizedError
 

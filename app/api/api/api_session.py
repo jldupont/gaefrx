@@ -10,13 +10,10 @@ import setup #@UnusedImport
 
 from gaefrx.excepts import BadRequestError
 
-from gaefrx.api import BaseApi#, requires_auth
-from gaefrx.api.response import ApiResponse
-import gaefrx.api.code as code
+import gaefrx.api as api
 import gaefrx.data.user as user
 
-
-class ApiSession(BaseApi):
+class ApiSession(api.BaseApi):
     
     def hpost(self, *p):
         '''
@@ -25,6 +22,14 @@ class ApiSession(BaseApi):
         @raise BadRequestError
         '''
         ctx = self.get_context()
+        
+        realm = ctx['realm']
+        if realm is None:
+            raise BadRequestError('realm')
+        
+        token = ctx['token']
+        if token is None:
+            raise BadRequestError('token')
         
         email = ctx['email']
         if email is None:
@@ -37,9 +42,10 @@ class ApiSession(BaseApi):
         #  a) user entity exists
         #  b) user entity must be created
         #
-
+        if maybe_user is None:
+            user.verify_identity_authentication(realm, token)
         
-        return ApiResponse(code.SUCCESS, [])
+        return api.ApiResponse(api.code.SUCCESS, [])
 
     def hdelete(self, *p):
         '''
@@ -47,7 +53,7 @@ class ApiSession(BaseApi):
         '''
         logging.info("Session:Sign-out: %s" % (p, ))
         
-        return ApiResponse(code.SUCCESS, [])
+        return api.ApiResponse(api.code.SUCCESS, [])
 
 
 ## -------------------------------------------------------

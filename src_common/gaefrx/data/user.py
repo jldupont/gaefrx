@@ -10,6 +10,8 @@ from gaefrx.model.user import User, FederatedIdentity
 from gaefrx.excepts import DatastoreError, InvalidParameterValueError
 from gaefrx.excepts import BadRequestError, NotFoundError
 
+from gaefrx.data import isp as isp 
+
 
 def ensure_authentication(context):
     """
@@ -114,18 +116,22 @@ def delete():
 # =====================
 # 
 
-def verify_identity_authentication(realm, email, token):
+def verify_identity_authentication(realm, token):
     '''
     Verify with the Identity Service Provider
      the validity of the authentication parameters
      
     @param realm : a supported realm (e.g. google, ... )
-    @param email
     @param token : a realm specific authentication token
     
     @return True | False
     @raise InvalidParameterValueError
     @raise RemoteServiceError
+    @raise NotFoundError
     '''
+    
+    provider = isp.lookup_provider(realm)
+    
+    provider.verify(token)
     
     

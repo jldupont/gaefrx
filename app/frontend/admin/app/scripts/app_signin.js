@@ -28,7 +28,7 @@
 		  
 		  mbus.fire('X-user_signin', {
 			  realm:   'google',
-			  id:      current_user_id,
+			  token:   current_user_id,
 			  domain:  current_user.getHostedDomain(),
 			  name:    current_user_profile.getName(),
 			  email:   current_user_profile.getEmail()

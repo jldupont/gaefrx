@@ -18,8 +18,13 @@
 	  
 	  var mbus = document.querySelector("#mbus");
 	
-	  mbus.addEventListener('X-user_signin', function(data){
+	  mbus.addEventListener('X-user_signin', function(event){
+		  
+		  var data = event.detail;
+		  
 		  current_user = data;
+		  
+		  api.set_user( current_user );
 		  
 		  api.session_create({
 			  cb_success: function(_, status, response) {

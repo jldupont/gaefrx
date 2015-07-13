@@ -4,7 +4,7 @@ Created on Jul 9, 2015
 @author: jldupont
 '''
 
-from gaefrx.excepts import NotFoundError
+#from gaefrx.excepts import NotFoundError
 
 class MetaIsp(type):
     
@@ -44,19 +44,9 @@ class BaseIsp():
     
     __metaclass__ = MetaIsp
     
-    def verify(self, email, token):
+    def verify(self, token):
         raise Exception('unimplemented')
     
 
-def lookup_provider(name):
-    '''
-    @param name: the isp name
-    @return BaseIsp subclass
-    @raise  NotFoundError
-    '''
-    assert isinstance(name, basestring), 'expected string, got: %s' % repr(name)
-    try:
-        return MetaIsp.isps[name]
-    except:
-        raise NotFoundError('realm: %s' % repr(name))
+
     
