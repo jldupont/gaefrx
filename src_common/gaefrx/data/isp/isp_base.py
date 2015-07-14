@@ -46,6 +46,11 @@ class BaseIsp():
     
     @classmethod
     def verify(cls, token):
+        '''
+        @return user info dict { domain, name_last, name_first, id }
+        @raise NotFoundError
+        @raise RemoteServiceError
+        '''
         raise Exception('unimplemented')
     
 
