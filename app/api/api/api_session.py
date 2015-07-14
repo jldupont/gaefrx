@@ -10,10 +10,12 @@ import setup #@UnusedImport
 
 from gaefrx.excepts import BadRequestError
 
-import gaefrx.api as api
+from gaefrx.api.base import BaseApi
+from gaefrx.api.response import ApiResponse
+import gaefrx.api.code as code 
 import gaefrx.data.user as user
 
-class ApiSession(api.BaseApi):
+class ApiSession(BaseApi):
     
     def hpost(self, *p):
         '''
@@ -45,7 +47,7 @@ class ApiSession(api.BaseApi):
         if maybe_user is None:
             user.verify_identity_authentication(realm, token)
         
-        return api.ApiResponse(api.code.SUCCESS, [])
+        return ApiResponse(code.SUCCESS, [])
 
     def hdelete(self, *p):
         '''
@@ -53,7 +55,7 @@ class ApiSession(api.BaseApi):
         '''
         logging.info("Session:Sign-out: %s" % (p, ))
         
-        return api.ApiResponse(api.code.SUCCESS, [])
+        return ApiResponse(code.SUCCESS, [])
 
 
 ## -------------------------------------------------------

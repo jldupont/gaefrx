@@ -18,7 +18,8 @@ except:
 
 class IspGoogle(BaseIsp):
     
-    def verify(self, token):
+    @classmethod
+    def verify(cls, token):
         
         idinfo = client.verify_id_token(token, CLIENT_ID)
         

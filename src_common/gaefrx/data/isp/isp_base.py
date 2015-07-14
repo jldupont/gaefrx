@@ -44,7 +44,8 @@ class BaseIsp():
     
     __metaclass__ = MetaIsp
     
-    def verify(self, token):
+    @classmethod
+    def verify(cls, token):
         raise Exception('unimplemented')
     
 
