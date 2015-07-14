@@ -6,6 +6,14 @@ api_version: 1
 threadsafe: true
 
 
+libraries:
+- name: ssl
+  version: latest
+
+- name: pycrypto
+  version: latest
+
+
 handlers:
 
 - url: /_api/domain

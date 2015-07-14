@@ -23,4 +23,4 @@ class IspGoogle(BaseIsp):
         
         idinfo = client.verify_id_token(token, CLIENT_ID)
         
-        logging.log("idinfo: %s" % repr(idinfo))
+        logging.info("idinfo: %s" % repr(idinfo))
