@@ -5,9 +5,9 @@ Created on Jul 9, 2015
 '''
 import os, logging
 
-from oauth2client import client#, crypt
+from oauth2client import client, crypt
 
-from gaefrx.excepts import NotFoundError
+from gaefrx.excepts import NotFoundError, RemoteServiceError
 from isp_base import BaseIsp
 
 try:
@@ -21,10 +21,8 @@ class IspGoogle(BaseIsp):
     @classmethod
     def verify(cls, token):
         '''
-        @return user info dict
+        @return user info dict { domain, name_last, name_first, id }
         @raise NotFoundError
-        
-        @todo: cannot trap this error  
         @raise RemoteServiceError
         '''
         try:
@@ -36,7 +34,17 @@ class IspGoogle(BaseIsp):
             if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
                 raise NotFoundError('wrong issuer')
             
-        except:
+        except crypt.AppIdentityError:
             raise NotFoundError()
         
-        logging.info("idinfo: %s" % repr(idinfo))
+        except Exception, e:
+            logging.debug("IspGoogle: %s" % repr(e))
+            raise RemoteServiceError()
+            
+        return {
+                 'email':       idinfo['email']
+                 ,'domain':     idinfo.get('hd', None)
+                 ,'name_last':  idinfo['family_name']
+                 ,'name_first': idinfo['given_name']
+                 ,'id':         idinfo['sub']
+                } 

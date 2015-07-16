@@ -9,10 +9,11 @@ Created on Jun 26, 2015
 ##  definition in order to save typing when constructing
 ##  an instance of this class
 ##
-SUCCESS=200
-CREATED=201
+SUCCESS = 200
+CREATED = 201
 BAD_REQUEST = 400
-METHOD_NOT_ALLOWED=405
+NOT_FOUND_ERROR = 404
+METHOD_NOT_ALLOWED = 405
 SERVER_ERROR = 500
 
 
