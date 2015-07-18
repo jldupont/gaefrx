@@ -22,6 +22,9 @@ class ApiSession(BaseApi):
         Sign-In
         
         @raise BadRequestError
+        @raise InvalidParameterValueError
+        @raise RemoteServiceError
+        @raise NotFoundError
         '''
         ctx = self.get_context()
         
@@ -44,10 +47,20 @@ class ApiSession(BaseApi):
         #  a) user entity exists
         #  b) user entity must be created
         #
-        if maybe_user is None:
-            user.verify_identity_authentication(realm, token)
         
-        return ApiResponse(code.SUCCESS, [])
+        if maybe_user is None:
+            
+            user_data = user.verify_identity_authentication(realm, token)
+            
+            user_data.pop('domain', None)
+            user_data['realm'] = realm
+            
+            u = user.create(**user_data)
+            
+        else:
+            u = maybe_user
+        
+        return ApiResponse(code.SUCCESS, u.to_json())
 
     def hdelete(self, *p):
         '''

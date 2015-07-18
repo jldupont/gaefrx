@@ -21,7 +21,7 @@ class IspGoogle(BaseIsp):
     @classmethod
     def verify(cls, token):
         '''
-        @return user info dict { domain, name_last, name_first, id }
+        @return user info dict { domain, name_last, name_first, user_id }
         @raise NotFoundError
         @raise RemoteServiceError
         '''
@@ -46,5 +46,6 @@ class IspGoogle(BaseIsp):
                  ,'domain':     idinfo.get('hd', None)
                  ,'name_last':  idinfo['family_name']
                  ,'name_first': idinfo['given_name']
-                 ,'id':         idinfo['sub']
+                 ,'user_id':    idinfo['sub']
+                 ,'token':      token
                 } 

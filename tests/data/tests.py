@@ -8,6 +8,8 @@ import unittest
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
+import gaefrx.setup_secrets #@UnusedImport
+
 import gaefrx.data.isp as isp
 import gaefrx.data.user as user
 
@@ -56,7 +58,7 @@ class Test1(unittest.TestCase):
         
     def testDataUserCreation(self):
         
-        u = user.create('google', 'email@test.com', "6666")
+        u = user.create( realm = 'google', email = 'email@test.com', token = "6666")
         
         self.assertTrue(isinstance(u, user.User), 'Expecting a User entity')
 

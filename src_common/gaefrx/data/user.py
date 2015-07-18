@@ -67,7 +67,7 @@ def get_by_email(email):
 
     return r
     
-def create(realm, email, token, user_id = '', name_first = '', name_last = ''):
+def create(realm = None, email = None, token = None, user_id = '', name_first = '', name_last = ''):
     '''
     Create a User entity
     
@@ -131,7 +131,6 @@ def verify_identity_authentication(realm, token):
     '''
     
     provider = isp.lookup_provider(realm)
-    
-    provider.verify(token)
+    return provider.verify(token)
     
     

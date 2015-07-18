@@ -16,7 +16,11 @@ Use the `test_runner` bash script.
 Dev Server
 ----------
 
-Use the bash script `dev_runner`.
+- Use the bash script `dev_runner`.
+- For the admin application:
+  - cd app/frontend/admin
+  - gulp serve
+
 
 Dependencies
 ------------

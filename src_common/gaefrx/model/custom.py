@@ -27,6 +27,8 @@ class DbResource(Resource, ndb.Model):
     date_accessed    = ndb.DateTimeProperty(auto_now=True)
     suspended        = ndb.BooleanProperty(default=False)
 
+    def to_json(self):
+        return self.to_dict(exclude = ['date_created', 'date_accessed'] )
 
 
 class UserKeyProperty(ndb.KeyProperty):

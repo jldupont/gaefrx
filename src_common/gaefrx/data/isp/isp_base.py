@@ -47,7 +47,7 @@ class BaseIsp():
     @classmethod
     def verify(cls, token):
         '''
-        @return user info dict { domain, name_last, name_first, id }
+        @return user info dict { domain, name_last, name_first, user_id }
         @raise NotFoundError
         @raise RemoteServiceError
         '''
