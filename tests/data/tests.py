@@ -8,6 +8,8 @@ import unittest
 from google.appengine.ext import ndb
 from google.appengine.ext import testbed
 
+from pyrbac.role import Admin
+
 import gaefrx.setup_secrets #@UnusedImport
 
 import gaefrx.data.isp as isp
@@ -76,6 +78,31 @@ class Test1(unittest.TestCase):
         uf_i3 = uf.get_identity_by_realm('FACEBOOK')
         self.assertEqual(uf_i3, None)
 
+    def testDataUserAddRole(self):
+        
+        _ = user.create( realm = 'google', email = 'email@test.com', token = "6666")
+        uf = user.get_by_email('email@test.com')
+        
+        user.add_role(uf, Admin)
+        
+        self.assertEqual(uf.roles, [Admin], 'Expecting role admin')
+        
+    def testDataUserAssignAdmin(self):
+        '''
+        Assign 'admin' role to 1st user created
+        '''
+        
+        _ = user.create( realm = 'google', email = 'test1@test.com', token = "1111")
+        _ = user.create( realm = 'google', email = 'test2@test.com', token = "2222")
+        _ = user.create( realm = 'google', email = 'test3@test.com', token = "3333")
+        
+        user.assign_admin()
+        
+        u1 = user.get_by_email('test1@test.com')
+        self.assertTrue(u1.roles == [Admin], 'Expecting 1st user to have admin role')
+        
+        u2 = user.get_by_email('test2@test.com')
+        self.assertTrue(u2.roles == [])
 
 class Test2(unittest.TestCase):
 

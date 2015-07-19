@@ -5,6 +5,7 @@ Created on Jul 9, 2015
 
 @author: jldupont
 '''
+from pyrbac.role import Role, Admin
 
 from gaefrx.model.user import User, FederatedIdentity
 from gaefrx.excepts import DatastoreError, InvalidParameterValueError
@@ -102,6 +103,41 @@ def create(realm = None, email = None, token = None, user_id = '', name_first = 
         raise DatastoreError(e)
     
     return u
+    
+
+def assign_admin():
+    '''
+    Assign the role 'admin' to the first user created
+    
+    @raise DatastoreError
+    @raise NotFoundError
+    '''
+    q = User.query()
+    q = q.order(User.date_created)
+    
+    try:
+        u = q.fetch(1)[0]
+    except Exception, e:
+        raise DatastoreError( e )
+    
+    add_role(u, Admin)
+
+    try:
+        u.put()
+        
+    except Exception, e:
+        raise DatastoreError( e )
+    
+    
+    
+def add_role(user, role):
+    '''
+    Add 1 Role to user 
+    '''
+    assert isinstance(user, User), 'expecting User, got: %s' % repr(user)
+    assert issubclass(role, Role), 'expecting Role, got: %s' % repr(user)
+    
+    user.roles.append(role)
     
 def update():
     '''
