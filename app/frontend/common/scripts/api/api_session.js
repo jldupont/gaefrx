@@ -34,7 +34,7 @@ api.session_create = function(context) {
  *    cb_error   [optional]
  *  }
  */
-api.session_terminate = function(){
+api.session_terminate = function(context){
 
 	api.request({
 		path: 'session',

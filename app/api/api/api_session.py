@@ -8,7 +8,7 @@ import webapp2
 
 import setup #@UnusedImport
 
-from gaefrx.excepts import BadRequestError
+from gaefrx.excepts import BadRequestError, NotFoundError
 
 from gaefrx.api.base import BaseApi
 from gaefrx.api.response import ApiResponse
@@ -58,6 +58,8 @@ class ApiSession(BaseApi):
             u = user.create(**user_data)
             
         else:
+            
+            _ = user.verify_identity_authentication(realm, token)
             u = maybe_user
         
         return ApiResponse(code.SUCCESS, u.to_json())
@@ -65,28 +67,26 @@ class ApiSession(BaseApi):
     def hdelete(self, *p):
         '''
         Sign-Out
+        
+        @raise DatastoreError
+        @raise NotFoundError
         '''
-        logging.info("Session:Sign-out: %s" % (p, ))
+        ctx = self.get_context()
+        
+        email = ctx['email']
+        if email is None:
+            raise BadRequestError('email') 
+        
+        maybe_user = user.get_by_email(email)
+        
+        if maybe_user is None:
+            raise NotFoundError()
+        
+        user.delete_sessions(maybe_user)
         
         return ApiResponse(code.SUCCESS, [])
 
 
-## -------------------------------------------------------
-
-    def _create_user(self, ctx):
-        '''
-        Create the User entity given the request context
-        
-        @raise DatastoreError
-        @raise InvalidParameterValueError
-        @return User
-        '''
-        
-        realm = ctx['realm']
-        email = ctx['email']
-        token = ctx['token']
-        
-        return user.create(realm, email, token)
 
 
 app = webapp2.WSGIApplication([

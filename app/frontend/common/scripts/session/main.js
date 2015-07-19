@@ -38,7 +38,18 @@
 	  });
 
 	  mbus.addEventListener('X-user_signout', function(data){
-		  current_user = {};
+		  
+		  api.session_terminate({
+			  cb_success: function(_, status, response) {
+				  console.log("Session Terminate Success: ", response);
+				  
+				  current_user = {};
+			  },
+			  cb_error: function(_, status, response) {
+				  console.log("Session Terminate Error: ", response);
+			  }
+		  });
+		  
 	  });
 	  
 	  

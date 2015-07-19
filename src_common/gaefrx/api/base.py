@@ -11,7 +11,7 @@ from gaefrx.api.response import ApiResponse
 import gaefrx.api.code as code 
 
 from gaefrx.excepts import ImplementationError, BadRequestError, UnsupportedMethodError
-from gaefrx.excepts import UnauthorizedError, NotFoundError, RemoteServiceError
+from gaefrx.excepts import UnauthorizedError, NotFoundError, RemoteServiceError, DatastoreError
 
 from gaefrx.data.user import ensure_authentication
 
@@ -104,7 +104,7 @@ class _RootApi(webapp2.RequestHandler):
 
             self._generate_response(maybe_response)
 
-        except (RemoteServiceError,), e:
+        except (RemoteServiceError, DatastoreError), e:
             self._generate_response_error(code.SERVICE_UNAVAILABLE, e)
 
         except (NotFoundError,), e:

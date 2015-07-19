@@ -111,7 +111,28 @@ def update():
 def delete():
     '''
     '''
+
+#
+# =====================
+# 
+def delete_sessions(u):
+    '''
+    Delete the session tokens for all identities
+    
+    @raise DatastoreError
+    @return None
+    '''
+    assert isinstance(u, User), 'expected User, got: %s' % repr(u)
+    
+    for ident in u.identities:
+        ident.token = None
    
+    try:
+        u.put()
+        
+    except Exception, e:
+        raise DatastoreError(e)
+    
 #
 # =====================
 # 
@@ -124,7 +145,7 @@ def verify_identity_authentication(realm, token):
     @param realm : a supported realm (e.g. google, ... )
     @param token : a realm specific authentication token
     
-    @return True | False
+    @return dict user_data
     @raise InvalidParameterValueError
     @raise RemoteServiceError
     @raise NotFoundError
