@@ -3,7 +3,7 @@ Created on Jun 26, 2015
 
 @author: jldupont
 '''
-#import logging
+import logging  #@UnusedImport
 import json
 import webapp2
 
@@ -147,7 +147,14 @@ class _RootApi(webapp2.RequestHandler):
         ##
         if response_object.data is not None:
             self.response.headers['Content-Type'] = "application/json"
-            json_repr = json.dumps(response_object.data)
+            
+            data = response_object.data
+            
+            try:
+                json_repr = data.to_json()
+            except:
+                json_repr = json.dumps( data )
+            
             self.response.out.write(json_repr)
             
         if self.CORS_ENABLED:
@@ -227,4 +234,3 @@ class BaseApi(_RootApi):
         The default 'DELETE' verb
         """
         raise UnsupportedMethodError('delete')
-

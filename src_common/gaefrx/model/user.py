@@ -59,4 +59,13 @@ class User(DbResource):
             
         return None
             
+    def to_json(self):
+        '''
+        Prepare a JSON string representation
+        '''
+        d = self.to_dict_for_export()
+        
+        jroles = RolesProperty.to_json(d['roles'])
+        d['roles'] = jroles
+        return d
         

@@ -27,7 +27,7 @@ class DbResource(Resource, ndb.Model):
     date_accessed    = ndb.DateTimeProperty(auto_now=True)
     suspended        = ndb.BooleanProperty(default=False)
 
-    def to_json(self):
+    def to_dict_for_export(self):
         return self.to_dict(exclude = ['date_created', 'date_accessed', 
                                        'created_by', 'last_modified_by'] )
 
@@ -51,10 +51,10 @@ class RolesProperty(ndb.StringProperty):
         
         if not all(issubclass(elem, Role) for elem in value):
             raise TypeError('expected a List of Role, got %s' % repr(value))
-        
     
     def _to_base_type(self, value):
-        names_list = roles_class_to_name_list(value)
+        
+        names_list = self.to_json(value)
         return json.dumps(names_list)
     
     def _from_base_type(self, value):
@@ -63,4 +63,8 @@ class RolesProperty(ndb.StringProperty):
         '''
         names_list = json.loads(value)
         return roles_class_from_name_list(names_list) 
+
+    @classmethod
+    def to_json(cls, value):
+        return roles_class_to_name_list(value)
     

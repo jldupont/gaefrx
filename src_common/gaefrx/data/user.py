@@ -137,7 +137,8 @@ def add_role(user, role):
     assert isinstance(user, User), 'expecting User, got: %s' % repr(user)
     assert issubclass(role, Role), 'expecting Role, got: %s' % repr(user)
     
-    user.roles.append(role)
+    if role not in user.roles:
+        user.roles.append(role)
     
 def update():
     '''

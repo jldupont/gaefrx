@@ -58,11 +58,10 @@ class ApiSession(BaseApi):
             u = user.create(**user_data)
             
         else:
-            
             _ = user.verify_identity_authentication(realm, token)
             u = maybe_user
         
-        return ApiResponse(code.SUCCESS, u.to_json())
+        return ApiResponse(code.SUCCESS, u)
 
     def hdelete(self, *p):
         '''
