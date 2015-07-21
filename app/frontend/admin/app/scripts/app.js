@@ -19,6 +19,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  
 	  api.init();
 	  
+	  // setup RBAC
+	  //  'roles' comes from the client_bridge.js
+	  //
+	  rbac.define_roles(roles);
+	  
 	  /*
 	  var toggle_button = document.querySelector('#toggle-button-dialog');
 	  var test_dialog = document.querySelector('#testdialog');

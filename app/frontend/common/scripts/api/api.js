@@ -14,7 +14,7 @@ api = {};
 
 //-------------------------------------------------------- PRIVATE parameters
 
-api._current_user = {};
+api._current_signin = {};
 api._context = {};
 api._options = {};
 
@@ -55,26 +55,26 @@ api.init = function(){
 };
 
 /*
- *  Setting the User related parameters
+ *  Setting the Sign-In related parameters
  *  
  *  This can be done one time at the beginning of a session
  *  
- *  @param user_details : an object containing the details
+ *  @param signin_details : an object containing the details
  *    - realm
  *    - name
  *    - token
  *    - email
  */
-api.set_user = function(user_details){
-  api._current_user = user_details || {};	
+api.set_signin = function(signin_details){
+  api._current_signin = signin_details || {};	
 };
 
 /*
- *  Delete the current user
+ *  Delete the current signin
  *  
  */
-api.del_user = function(){
-  api._current_user = {};	
+api.del_signin = function(){
+  api._current_signin = {};	
 };
 
 
@@ -122,9 +122,9 @@ api.request = function(context){
 	
 	context.headers = {
 		'Content-Type': 'application/json',
-		'From':         api._current_user.email || null,
-		'X-realm':      api._current_user.realm || null,
-		'X-token':      api._current_user.token || null
+		'From':         api._current_signin.email || null,
+		'X-realm':      api._current_signin.realm || null,
+		'X-token':      api._current_signin.token || null
 	};
 	
 	return api._make_request(context);

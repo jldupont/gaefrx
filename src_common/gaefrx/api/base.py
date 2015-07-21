@@ -151,7 +151,7 @@ class _RootApi(webapp2.RequestHandler):
             data = response_object.data
             
             try:
-                json_repr = data.to_json()
+                json_repr = json.dumps( data.to_json() )
             except:
                 json_repr = json.dumps( data )
             
