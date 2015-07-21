@@ -29,10 +29,10 @@
 		  api.set_signin( current_signin );
 		  
 		  api.session_create({
-			  cb_success: function(_, status, response) {
-				  console.log("Session Create Success: ", response);
+			  cb_success: function(_, status, response_object) {
+				  console.log("Session Create Success: ", response_object);
 				  
-				  current_user = JSON.parse(response);
+				  current_user = response_object;
 				  
 				  mbus.async(function(){
 					  mbus.fire('X-user', current_user);
@@ -48,16 +48,20 @@
 
 	  mbus.addEventListener('X-user_signout', function(data){
 		  
-		  api.set_user( {} );
+		  var clear = function(){
+			  api.set_signin( {} );
+			  current_user = {};
+			  current_signin = {};
+		  };
 		  
 		  api.session_terminate({
 			  cb_success: function(_, status, response) {
 				  console.log("Session Terminate Success: ", response);
-				  
-				  current_user = {};
+				  clear();
 			  },
 			  cb_error: function(_, status, response) {
 				  console.log("Session Terminate Error: ", response);
+				  clear();
 			  }
 		  });
 		  

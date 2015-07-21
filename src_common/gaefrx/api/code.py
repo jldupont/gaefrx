@@ -22,5 +22,6 @@ all_codes = [ SUCCESS
              ,CREATED
              ,BAD_REQUEST
              ,METHOD_NOT_ALLOWED
-             ,SERVER_ERROR 
+             ,SERVER_ERROR
+             ,NOT_FOUND_ERROR 
              ]
