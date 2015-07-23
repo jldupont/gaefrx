@@ -1,5 +1,10 @@
 /*
  * @author: jldupont
+ * 
+ * Dependencies:  
+ * - underscore.js
+ * - api
+ * 
  */
 
 (function(document) {
@@ -20,9 +25,11 @@
 		  var required_permission = section.getAttribute('data-required-permission');
 		  var result = rbac.ensure(current_user, required_permission);
 		  
-		  console.log("Section: ", section);
-		  console.log("permission: ", required_permission);
-		  console.log("result: ", result);
+		  //console.log("Section: ", section);
+		  
+		  if (api.get_option('debug'))
+			  console.log("permission: ", required_permission, "  result: ", result);
+		  //console.log("result: ", result);
 		  
 		  show_hide_section(section, result);
 	  });

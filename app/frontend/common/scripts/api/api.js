@@ -89,6 +89,27 @@ api.set_options = function(options){
 	api._options = options;
 };
 
+/*
+ *  Get an option value
+ */
+api.get_option = function(option_name) {
+	var value = api._options[option_name] || null;
+	
+	if (value=='true' || value=='false')
+		return !!value;
+	
+	var maybe_int = parseInt(value);
+	if (maybe_int != NaN)
+		return maybe_int;
+	
+	var maybe_float = parseFloat(value);
+	if (maybe_float != NaN)
+		return maybe_float;
+	
+	return value;
+};
+
+
 //-------------------------------------------------------- PRIVATE functions
 
 

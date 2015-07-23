@@ -3,6 +3,8 @@
  * 
  * 
  * @author: jldupont
+ * 
+ * Dependencies:
  */
 
 (function(document) {

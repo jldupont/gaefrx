@@ -82,7 +82,7 @@
                 <span>Domains</span>
               </a>
 
-              <a data-route="users" href="/users">
+              <a data-route="users" href="/users" data-required-permission="users:list" hidden>
                 <iron-icon icon="account-box"></iron-icon>
                 <span>Users</span>
               </a>
@@ -122,8 +122,6 @@
         <!-- Main Content -->
         <div class="content">
         
-        
-        
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
@@ -134,7 +132,7 @@
 
             </section>
 
-            <section data-route="users">
+            <section data-route="users" data-required-permission="users:list" hidden>
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Users</h2>
                 <p>This is the users section</p>
@@ -151,18 +149,11 @@
               </paper-material>
             </section>
 
-            <section data-route="domains" data-required-permission="domain:list">
+            <section data-route="domains" 
+            			data-required-permission="domain:list">
               <paper-material elevation="1">
-                <h2 class="paper-font-display2">Domains</h2>
-                <p>Domain Management</p>
-                
-                <paper-button raised id='toggle-button-dialog'>Toggle Dialog</paper-button>
-                
-
+              	<page-domains></page-domains>
               </paper-material>
-              
-
-              
             </section>
 
           </iron-pages>
