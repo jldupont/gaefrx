@@ -12,6 +12,7 @@ import gaefrx.api.code as code
 
 from gaefrx.excepts import ImplementationError, BadRequestError, UnsupportedMethodError
 from gaefrx.excepts import UnauthorizedError, NotFoundError, RemoteServiceError, DatastoreError
+from gaefrx.excepts import ExistsError
 
 from gaefrx.data.user import ensure_authentication
 
@@ -114,7 +115,7 @@ class _RootApi(webapp2.RequestHandler):
         except (ImplementationError,), e:
             self._generate_response_error(code.SERVER_ERROR, e)
             
-        except (BadRequestError, ), e:
+        except (BadRequestError, ExistsError), e:
             self._generate_response_error(code.BAD_REQUEST, e)
 
         except (UnsupportedMethodError, ), e:

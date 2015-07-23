@@ -15,4 +15,9 @@ class Domain(DbResource):
     name = ndb.StringProperty(default='')
     
     
+    def to_json(self):
+        '''
+        Prepare a JSON string representation
+        '''
+        return self.to_dict_for_export()
     

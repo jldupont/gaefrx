@@ -8,10 +8,13 @@ import webapp2
 
 import setup #@UnusedImport
 
+from gaefrx.excepts import InvalidParameterValueError, ExistsError
+
 from gaefrx.api.base import BaseApi, requires_auth
 from gaefrx.api.response import ApiResponse
 import gaefrx.api.code as code
 
+import gaefrx.data.domain as ddomain
 
 class ApiDomainCollection(BaseApi):
     
@@ -31,11 +34,28 @@ class ApiDomain(BaseApi):
     """
     
     @requires_auth
-    def hpost(self, user, domain_name):
+    def hpost(self, user, name):
         '''
         Create Domain
+        
+        Checks for duplicates
+        
+        @raise InvalidParameterValueError
+        @raise DatastoreError
+        @raise ExistsError 
         '''
-        return ApiResponse(code.SUCCESS, [])
+        if not isinstance(name, basestring):
+            raise InvalidParameterValueError('name')
+            
+        name = name.lower()
+            
+        maybe_domain = ddomain.get_by_name(name)
+        if maybe_domain is not None:
+            raise ExistsError()
+        
+        d = ddomain.create(name)
+        
+        return ApiResponse(code.SUCCESS, d)
     
         
     #def hget(self, *p):
