@@ -8,9 +8,11 @@ import webapp2
 
 import setup #@UnusedImport
 
+from pyrbac import Permission, Create
+
 from gaefrx.excepts import InvalidParameterValueError, ExistsError
 
-from gaefrx.api.base import BaseApi, requires_auth
+from gaefrx.api.base import BaseApi, requires_auth, requires_permission
 from gaefrx.api.response import ApiResponse
 import gaefrx.api.code as code
 
@@ -33,7 +35,9 @@ class ApiDomain(BaseApi):
     The API for the resource 'Domain'
     """
     
+    
     @requires_auth
+    @requires_permission(Permission(ddomain.Domain, Create))
     def hpost(self, user, name):
         '''
         Create Domain

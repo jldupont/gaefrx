@@ -7,6 +7,8 @@ import logging  #@UnusedImport
 import json
 import webapp2
 
+from pyrbac import ensure, PermissionError
+
 from gaefrx.api.response import ApiResponse
 import gaefrx.api.code as code 
 
@@ -16,6 +18,27 @@ from gaefrx.excepts import ExistsError
 
 from gaefrx.data.user import ensure_authentication
 
+
+class requires_permission(object):
+    '''
+    Decorator - check permission
+    
+    @raise PermissionError
+    '''
+    def __init__(self, permission):
+        self.permission = permission
+        
+    def __call__(self, fnc):
+        self.fnc = fnc
+        return self._check_permission
+
+    def _check_permission(self, this, user, *p):
+        '''
+        Expecting 'user' as first parameter
+        @raise PermissionError
+        '''
+        ensure(user, self.permission)
+        return self.fnc(this, user, *p)
 
 
 def requires_auth(method):
@@ -40,7 +63,6 @@ def requires_auth(method):
         return method(this, user, *pargs)
 
     return _
-
 
 
 
@@ -105,6 +127,9 @@ class _RootApi(webapp2.RequestHandler):
                 raise ImplementationError('Expecting ApiResponse instance for %s:%s' % (self.__class__.__name__, verb))
 
             self._generate_response(maybe_response)
+
+        except (PermissionError, ),e:
+            self._generate_response_error(code.FORBIDDEN, e)
 
         except (RemoteServiceError, DatastoreError), e:
             self._generate_response_error(code.SERVICE_UNAVAILABLE, e)

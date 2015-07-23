@@ -7,6 +7,7 @@ Created on Jun 24, 2015
 
 @author: jldupont
 '''
+from pyrbac import UserRBAC
 
 from google.appengine.ext import ndb
 
@@ -28,7 +29,7 @@ class FederatedIdentity(ndb.Model):
     token      = ndb.StringProperty(required = True)
     
 
-class User(DbResource):
+class User(DbResource, UserRBAC):
     '''
     The User datastore model
     
