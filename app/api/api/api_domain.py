@@ -8,7 +8,7 @@ import webapp2
 
 import setup #@UnusedImport
 
-from gaefrx.api import BaseApi
+from gaefrx.api.base import BaseApi, requires_auth
 from gaefrx.api.response import ApiResponse
 import gaefrx.api.code as code
 
@@ -29,6 +29,15 @@ class ApiDomain(BaseApi):
     """
     The API for the resource 'Domain'
     """
+    
+    @requires_auth
+    def hpost(self, user, domain_name):
+        '''
+        Create Domain
+        '''
+        return ApiResponse(code.SUCCESS, [])
+    
+        
     #def hget(self, *p):
     #    logging.info("Domain, GET: %s" % (p, ))
 

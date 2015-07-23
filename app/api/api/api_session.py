@@ -60,6 +60,7 @@ class ApiSession(BaseApi):
         else:
             _ = user.verify_identity_authentication(realm, token)
             u = maybe_user
+            user.save_token(u, realm, token)
         
         return ApiResponse(code.SUCCESS, u)
 

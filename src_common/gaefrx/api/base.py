@@ -50,7 +50,6 @@ class _RootApi(webapp2.RequestHandler):
     
     HTTP_VERBS = ['get', 'post', 'put', 'delete', 'head', 'options']
     
-    
     def _normalize_headers(self):
         """
         All Headers and Cookies keys normalized to lowercase
@@ -65,6 +64,9 @@ class _RootApi(webapp2.RequestHandler):
          
         @return {...}
         '''
+        if self.nheaders is None:
+            self._normalize_headers()
+        
         return {
                  'name':  self.nheaders.get('x-name',  None)
                 ,'email': self.nheaders.get('from',    None)
@@ -93,7 +95,6 @@ class _RootApi(webapp2.RequestHandler):
         Dispatches to the verb handler
          using the pattern 'h$verb'        
         '''
-        self._normalize_headers()
         
         try:
             
@@ -200,7 +201,7 @@ class BaseApi(_RootApi):
         
         return response
     
-    def hoptions(self):
+    def hoptions(self, *_):
         '''
         The CORS pre-flight verb
         '''

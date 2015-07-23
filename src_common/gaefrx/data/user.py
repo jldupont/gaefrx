@@ -45,7 +45,29 @@ def ensure_authentication(context):
     
     return (idp.token == context.get('token', None), u)
     
-
+def save_token(user, realm, token):
+    '''
+    Just updates the token of a user
+    
+    The identity property must already exists
+    
+    @raise NotFoundError
+    @raise DatastoreError
+    '''
+    assert isinstance(user, User)
+    assert isinstance(realm, basestring)
+    
+    ident = user.get_identity_by_realm(realm)
+    if ident is None:
+        raise NotFoundError('identity')
+    
+    ident.token = token
+    
+    try:
+        user.put()
+    except:
+        raise DatastoreError()
+    
 
 def get_by_email(email):
     '''
