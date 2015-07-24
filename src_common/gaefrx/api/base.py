@@ -19,6 +19,27 @@ from gaefrx.excepts import ExistsError
 from gaefrx.data.user import ensure_authentication
 
 
+class accept_parameters(object):
+    '''
+    Decorator - helper for url parameters
+    '''
+    def __init__(self, list_parameter_name):
+        self.params = list_parameter_name
+        
+    def __call__(self, fnc):
+        self.fnc = fnc
+        return self._inject_params
+
+    def _inject_params(self, this, *p):
+        '''
+        Extract the sought parameters
+         and inject them in the keyword parameters
+         of the target method 
+        '''
+        values = { key: this.request.get(key, None) for key in self.params}
+        return self.fnc(this, *p, **values)
+        
+
 class requires_permission(object):
     '''
     Decorator - check permission

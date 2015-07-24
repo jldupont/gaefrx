@@ -12,19 +12,22 @@ from pyrbac import Permission, Create
 
 from gaefrx.excepts import InvalidParameterValueError, ExistsError
 
-from gaefrx.api.base import BaseApi, requires_auth, requires_permission
+from gaefrx.api.base import BaseApi, requires_auth, requires_permission, accept_parameters
 from gaefrx.api.response import ApiResponse
 import gaefrx.api.code as code
 
 import gaefrx.data.domain as ddomain
 
 class ApiDomainCollection(BaseApi):
-    
-    def hget(self, *p):
+
+    @requires_auth
+    @requires_permission(Permission(ddomain.Domain, Create))    
+    @accept_parameters(['cursor', 'start', 'dir', 'count'])
+    def hget(self, _user, **params):
         '''
         Retrieve a list of domains
         '''
-        logging.info("Domain Collection, GET: %s" % (p, ))
+        #logging.info("Domain Collection, GET: %s , %s" % (p, kw))
         
         return ApiResponse(code.SUCCESS, [])
 
