@@ -5,3 +5,4 @@
 # @author: Jean-Lou Dupont
 #
 python ./tools/test_runner.py $GOOGLE_APPENGINE tests
+python ./tools/test_runner.py $GOOGLE_APPENGINE app/api
