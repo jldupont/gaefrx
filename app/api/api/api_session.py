@@ -6,7 +6,7 @@
 import os, sys, logging #@UnusedImport
 import webapp2
 
-from gaefrx.excepts import BadRequestError, NotFoundError
+from gaefrx.excepts import BadRequestError, NotFoundError, UnauthorizedError
 
 from gaefrx.api.base import BaseApi
 from gaefrx.api.response import ApiResponse
@@ -69,9 +69,6 @@ class ApiSession(BaseApi):
         @raise DatastoreError
         @raise NotFoundError
         '''
-        #        @TODO:  Prevent third-party from delete session
-        #                Currently, only the email address is required 
-        
 
         ctx = self.get_context()
         
@@ -83,6 +80,26 @@ class ApiSession(BaseApi):
         
         if maybe_user is None:
             raise NotFoundError()
+        
+        #
+        # Don't give out too much information
+        #  on the nature of the exception
+        #  as to prevent potential attacks
+        #
+        token = ctx['token']
+        if token is None:
+            raise UnauthorizedError()
+        
+        realm = ctx['realm']
+        if realm is None:
+            raise UnauthorizedError()
+
+        ident = maybe_user.get_identity_by_realm(realm)
+        if ident is None:
+            raise UnauthorizedError()
+        
+        if ident.token != token:
+            raise UnauthorizedError()
         
         user.delete_sessions(maybe_user)
         

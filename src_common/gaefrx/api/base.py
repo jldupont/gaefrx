@@ -154,7 +154,7 @@ class _RootApi(webapp2.RequestHandler):
 
             self._generate_response(maybe_response)
 
-        except (PermissionError, ),e:
+        except (PermissionError, UnauthorizedError),e:
             self._generate_response_error(code.FORBIDDEN, e)
 
         except (RemoteServiceError, DatastoreError), e:
