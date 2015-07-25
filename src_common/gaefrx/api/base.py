@@ -46,6 +46,9 @@ class requires_permission(object):
     
     @raise PermissionError
     '''
+    
+    _DEBUG = False
+    
     def __init__(self, permission):
         self.permission = permission
         
@@ -58,7 +61,9 @@ class requires_permission(object):
         Expecting 'user' as first parameter
         @raise PermissionError
         '''
-        ensure(user, self.permission)
+        if not self._DEBUG:
+            ensure(user, self.permission)
+            
         return self.fnc(this, user, *p)
 
 

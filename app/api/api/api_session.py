@@ -6,8 +6,6 @@
 import os, sys, logging #@UnusedImport
 import webapp2
 
-import setup #@UnusedImport
-
 from gaefrx.excepts import BadRequestError, NotFoundError
 
 from gaefrx.api.base import BaseApi
@@ -71,6 +69,10 @@ class ApiSession(BaseApi):
         @raise DatastoreError
         @raise NotFoundError
         '''
+        #        @TODO:  Prevent third-party from delete session
+        #                Currently, only the email address is required 
+        
+
         ctx = self.get_context()
         
         email = ctx['email']

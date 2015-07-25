@@ -28,6 +28,7 @@ class ApiDomainCollection(BaseApi):
         Retrieve a list of domains
         '''
         #logging.info("Domain Collection, GET: %s , %s" % (p, kw))
+        # TODO: implement
         
         return ApiResponse(code.SUCCESS, [])
 
@@ -37,7 +38,6 @@ class ApiDomain(BaseApi):
     """
     The API for the resource 'Domain'
     """
-    
     
     @requires_auth
     @requires_permission(Permission(ddomain.Domain, Create))

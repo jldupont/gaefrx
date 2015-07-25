@@ -13,7 +13,6 @@ from gaefrx.excepts import BadRequestError, NotFoundError
 
 from gaefrx.data import isp as isp 
 
-
 def ensure_authentication(context):
     """
     Verifies authentication status
@@ -90,7 +89,8 @@ def get_by_email(email):
 
     return r
     
-def create(realm = None, email = None, token = None, user_id = '', name_first = '', name_last = ''):
+def create(realm = None, email = None, token = None, user_id = '', name_first = '', name_last = ''
+           , roles = []):
     '''
     Create a User entity
     
@@ -110,6 +110,7 @@ def create(realm = None, email = None, token = None, user_id = '', name_first = 
     '''
     assert isinstance(email, basestring), 'Expected string, got: %s' % repr(email)
     assert isinstance(token, basestring), 'Expected string, got: %s' % repr(token)
+    assert isinstance(roles, list), 'Expected list, got: %s' % repr(roles)
     
     if realm not in FederatedIdentity.SUPPORTED_REALMS:
         raise InvalidParameterValueError('realm')
@@ -117,6 +118,7 @@ def create(realm = None, email = None, token = None, user_id = '', name_first = 
     u = User(name_first = name_first, name_last = name_last
              ,email = [email]
              ,identities = [FederatedIdentity(realm = realm, user_id = user_id, email = email, token = token)]
+             ,roles = roles
              )
     try:
         u.put()
