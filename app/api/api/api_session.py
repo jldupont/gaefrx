@@ -69,7 +69,6 @@ class ApiSession(BaseApi):
         @raise DatastoreError
         @raise NotFoundError
         '''
-
         ctx = self.get_context()
         
         email = ctx['email']

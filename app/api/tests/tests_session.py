@@ -1,5 +1,5 @@
 '''
-Created on Jul 23, 2015
+Created on Jul 25, 2015
 
 @author: jldupont
 
@@ -18,7 +18,7 @@ from pyrbac import Admin
 from api import setup
 
 import gaefrx.data.user as duser
-from api.api_user import app
+from api.api_session import app
 
 from gaefrx.api.base import requires_permission
 
@@ -63,9 +63,9 @@ class TestHandlers(unittest.TestCase):
         self.u = None
 
 
-    def test_user_collection(self):
-       
-        request = webapp2.Request.blank('/_api/user/test@example.com'
+    def _attempt_delete(self):
+        
+        request = webapp2.Request.blank('/_api/session'
                                         ,headers={
                                                   'From': 'test@example.com'
                                                   ,'X-email': 'test@example.com'
@@ -73,12 +73,28 @@ class TestHandlers(unittest.TestCase):
                                                   ,'X-token': '6666'
                                                   }
                                         )
-        request.method = 'GET'
+        request.method = 'DELETE'
         
         # Get a response for that request.
-        response = request.get_response(app)
+        return request.get_response(app)
+        
+
+    def test_session_delete(self):
+        '''
+        We have an 'authenticated' session created in setUp
+        
+        Let's try to delete this a first time: OK
+        A second time: Unauthorized
+        '''
+        response = self._attempt_delete()
 
         # Let's check if the response is correct.
-        self.assertEqual(response.status_int, 200, 'got: %s' % response)
+        self.assertEqual(response.status_int, 200, 'Expected 200, got: %s' % response)
+
+        
+        response2 = self._attempt_delete()
+
+        # Let's check if the response is correct.
+        self.assertEqual(response2.status_int, 403, 'Expected 403, got: %s' % response)
         
        
