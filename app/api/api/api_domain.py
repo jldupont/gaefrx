@@ -8,7 +8,7 @@ import webapp2
 
 import setup #@UnusedImport
 
-from pyrbac import Permission, Create, List, Read
+from pyrbac import Permission, Create, List, Read, Delete
 
 from gaefrx.excepts import InvalidParameterValueError, ExistsError, NotFoundError
 
@@ -94,6 +94,31 @@ class ApiDomain(BaseApi):
         
         return ApiResponse(code.SUCCESS, d)
     
+    @requires_auth
+    @requires_permission(Permission(ddomain.Domain, Delete))
+    def hdelete(self, user, name):
+        '''
+        Create Domain
+        
+        Checks for duplicates
+        
+        @raise InvalidParameterValueError
+        @raise DatastoreError
+        @raise ExistsError 
+        '''
+        if not isinstance(name, basestring):
+            raise InvalidParameterValueError('name')
+            
+        name = name.lower()
+            
+        maybe_domain = ddomain.get_by_name(name)
+        if maybe_domain is None:
+            raise NotFoundError()
+    
+        
+        ddomain.delete(maybe_domain)
+        
+        return ApiResponse(code.SUCCESS, [])
         
     #def hget(self, *p):
     #    logging.info("Domain, GET: %s" % (p, ))

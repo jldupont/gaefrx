@@ -21,6 +21,15 @@ def export_domain(collection):
     
     return [domain.to_json() for domain in collection]
     
+def delete(domain):
+    
+    assert isinstance(domain, Domain)
+    
+    try:
+        domain.key.delete()
+    except:
+        raise DatastoreError()
+    
 
 def read_page(cursor = None, count = 100):
     '''
@@ -104,10 +113,6 @@ def update():
     '''
     '''
     
-    
-def delete():
-    '''
-    '''
 
 #
 # =====================

@@ -83,6 +83,41 @@ class TestHandlers(unittest.TestCase):
 
         # Let's check if the response is correct.
         self.assertEqual(response.status_int, 200, 'got: %s' % response)
+
+    def test_domain_delete_not_found(self):
+        
+        request = webapp2.Request.blank('/_api/domain/WHATEVER'
+                                        ,headers={
+                                                  'From': 'test@example.com'
+                                                  ,'X-email': 'test@example.com'
+                                                  ,'X-realm': 'google'
+                                                  ,'X-token': '6666'
+                                                  }
+                                        )
+        request.method = 'DELETE'
+
+        response = request.get_response(app)
+        self.assertEqual(response.status_int, 404, 'got: %s' % response)
+
+
+    def test_domain_delete(self):
+        
+        self._create_domain()
+        
+        request = webapp2.Request.blank('/_api/domain/testdomain'
+                                        ,headers={
+                                                  'From': 'test@example.com'
+                                                  ,'X-email': 'test@example.com'
+                                                  ,'X-realm': 'google'
+                                                  ,'X-token': '6666'
+                                                  }
+                                        )
+        request.method = 'DELETE'
+
+        response = request.get_response(app)
+        
+        # Let's check if the response is correct.
+        self.assertEqual(response.status_int, 200, 'got: %s' % response)
         
 
     def test_domain_read(self):
