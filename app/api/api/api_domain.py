@@ -22,15 +22,21 @@ class ApiDomainCollection(BaseApi):
 
     @requires_auth
     @requires_permission(Permission(ddomain.Domain, List))    
-    @accept_parameters(['cursor', 'start', 'dir', 'count'])
+    @accept_parameters(['cursor', 'count'])
     def hget(self, _user, **params):
         '''
         Retrieve a list of domains
         '''
-        #logging.info("Domain Collection, GET: %s , %s" % (p, kw))
-        # TODO: implement
         
-        return ApiResponse(code.SUCCESS, [])
+        domains, cursor, more = ddomain.read_page(**params)
+        
+        domains_repr = ddomain.export_domain(domains)
+        
+        return ApiResponse(code.SUCCESS, {
+                                          'domains': domains_repr
+                                          ,'cursor': cursor
+                                          ,'more':   more
+                                          })
 
 
 

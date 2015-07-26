@@ -59,9 +59,9 @@ class TestHandlers(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def _create_domain(self):
+    def _create_domain(self, name = 'testdomain'):
         
-        request = webapp2.Request.blank('/_api/domain/testdomain'
+        request = webapp2.Request.blank('/_api/domain/%s' % name
                                         ,headers={
                                                   'From': 'test@example.com'
                                                   ,'X-email': 'test@example.com'
@@ -108,5 +108,57 @@ class TestHandlers(unittest.TestCase):
         jrepr = json.loads( response.body )
         
         self.assertEqual(jrepr['name'], 'testdomain', 'got: %s' % response)
+    
+    def test_collection_empty(self):
+
+        request = webapp2.Request.blank('/_api/domain'
+                                        ,headers={
+                                                  'From': 'test@example.com'
+                                                  ,'X-email': 'test@example.com'
+                                                  ,'X-realm': 'google'
+                                                  ,'X-token': '6666'
+                                                  }
+                                        )
+        request.method = 'GET'
+
+        response = request.get_response(app)
         
+        self.assertEqual(response.status_int, 200, 'got: %s' % response)
+        
+        jrepr = json.loads(response.body)
+        
+        self.assertEqual(jrepr['domains'], [], 'got: %s' % response)
+        self.assertEqual(jrepr['cursor'], None, 'got: %s' % response)
+        
+        
+    def test_collection(self):
        
+        # Get a response for that request.
+        _response = self._create_domain('d1')
+        _response = self._create_domain('d2')
+        _response = self._create_domain('d3')
+        
+        
+        request = webapp2.Request.blank('/_api/domain'
+                                        ,headers={
+                                                  'From': 'test@example.com'
+                                                  ,'X-email': 'test@example.com'
+                                                  ,'X-realm': 'google'
+                                                  ,'X-token': '6666'
+                                                  }
+                                        )
+        request.method = 'GET'
+
+        response = request.get_response(app)
+        
+        self.assertEqual(response.status_int, 200, 'got: %s' % response)
+        
+        jrepr = json.loads(response.body)
+        
+        #
+        # We are expecing an ordered list
+        #
+        self.assertEqual(jrepr['domains'][0]['name'], 'd1')
+        self.assertEqual(jrepr['domains'][1]['name'], 'd2')
+        self.assertEqual(jrepr['domains'][2]['name'], 'd3')
+        
