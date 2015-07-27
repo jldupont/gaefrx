@@ -4,4 +4,4 @@
 #
 # @author: Jean-Lou Dupont
 #
-cd app && python $GOOGLE_APPENGINE/dev_appserver.py --api_port 7000 app.yaml dispatch.yaml api/api.yaml frontend/frontend.yaml
+cd app && python $GOOGLE_APPENGINE/dev_appserver.py --port 8080 --api_port 7000 app.yaml dispatch.yaml api/api.yaml frontend/frontend.yaml

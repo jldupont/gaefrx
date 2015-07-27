@@ -7,6 +7,12 @@ Setup
 
 * Make sure that the environment variable `GOOGLE_APPENGINE` points to the SDK.
 * The following environment variables should be defined in the file app/secrets.yaml. Use the file 'secrets.yaml.template' as starting point.
+* Install
+  - node
+  - npm
+  - sudo npm install bower -g
+  - sudo npm install gulp -g
+  
 
 Tests
 -----
