@@ -9,8 +9,6 @@
 	
 	var setup = function(){
 		
-	  var mbus = document.querySelector("#mbus");
-
 	  mbus.subscribe('X-user', function(data){
 		  console.log("section_domains: X-user: ", data);
 	  });

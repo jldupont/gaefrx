@@ -10,7 +10,6 @@
 (function(document) {
   'use strict';
 
-  var mbus = null;
   var current_user = null;
   
   var sections = [];
@@ -50,18 +49,13 @@
   
   var setup = function(){
 	  
-	  var mbus = document.querySelector("#mbus");
-	  
-	  mbus.addEventListener('X-user', function(event) {
-		  var data = event.detail;
+	  mbus.subscribe('X-user', function(data) {
+
 		  current_user = data;
-		  
-		  //console.log("X-User event, user= ", current_user);
-		  
 		  process_sections();
 	  });
 	  
-	  mbus.addEventListener('X-user_signout', function(details) {
+	  mbus.subscribe('X-user_signout', function(_) {
 		  console.log("User Signout event!");
 		  
 		  current_user = {};

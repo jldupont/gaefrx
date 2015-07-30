@@ -5,7 +5,6 @@
 (function(document) {
   'use strict';
 
-  var mbus = null;
   var current_user = null;
   var current_user_id = null;
   var current_user_profile = null;
@@ -13,7 +12,6 @@
  
   var setup = function(){
 	  
-	  var mbus = document.querySelector("#mbus");
 	  var gsign = document.querySelector("#google_signin");
 	  
 	  gsign.addEventListener('google-signin-aware-success', function(result){
