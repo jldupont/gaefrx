@@ -10,7 +10,25 @@
 <script>
   (function() {
     Polymer({
+    	
       is: 'gaefrx-bus',
+      
+      properties: {
+    	
+    	  
+      }, //properties
+      
+      subscribe: function(message_type, callback) {
+    	  
+    	  this.addEventListener(message_type, function(event) {
+    		  
+    		  var data = event.detail;
+    		  
+    		  callback(data, message_type);
+    	  });    	  
+    	  
+      }
+      
     });
   })();
 </script>
