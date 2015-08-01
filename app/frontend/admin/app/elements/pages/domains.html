@@ -1,6 +1,7 @@
 <!--
   Domains Management
   @author: jldupont
+  @dependencies:  api
 -->
 
 <dom-module id="page-domains">
@@ -8,12 +9,44 @@
   
 	<paper-icon-button class='red' icon="add-circle"><paper-icon-button>
   
+  	<iron-ajax is='dom-bind' id='ajaxdomains'
+  		
+  		url="/_api/domain"
+  	>
+  	</iron-ajax>
+  
   </template>
 </dom-module>
 <script>
   (function() {
     Polymer({
       is: 'page-domains',
+      
+      properties: {
+    	  
+      },
+      
+      init: function(){
+
+    	this.ajax_domains = this.$.ajaxdomains;
+    	
+    	var uri_parts = uri.parse(this.ajax_domains.url);
+    	
+    	var url_path = uri_parts.path;
+    	
+    	var host = api.get_host_and_port();
+    	
+    	var url = host + "/" + url_path;
+    	
+    	this.ajax_domains.url = url;
+    	this.ajax_domains.auto = true;
+    	  
+      },
+      
+      ready: function(){
+    	  
+      },
+      
     });
   })();
 </script>

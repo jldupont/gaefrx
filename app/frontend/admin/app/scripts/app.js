@@ -32,6 +32,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		test_dialog.toggle();  
 	  });
 	  */
+	  var page_domains = document.body.querySelector("page-domains");
+	  page_domains.init();
   };
   
   

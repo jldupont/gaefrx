@@ -39,6 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     page('/domains', function (ctx) {
       app.route = 'domains';
+      mbus.fire("X-section", 'domains');
     });
 
 

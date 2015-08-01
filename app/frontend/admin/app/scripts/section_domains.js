@@ -9,8 +9,10 @@
 	
 	var setup = function(){
 		
-	  mbus.subscribe('X-user', function(data){
-		  console.log("section_domains: X-user: ", data);
+	  mbus.subscribe('X-section', function(which_section){
+		  
+		  if (which_section=='domains')
+			  console.log("section_domains selected");
 	  });
 		
 	};//setup

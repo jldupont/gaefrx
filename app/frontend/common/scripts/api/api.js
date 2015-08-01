@@ -55,6 +55,13 @@ api.init = function(){
 };
 
 /*
+ *  Return scheme://host[:port]/
+ */
+api.get_host_and_port = function() {
+	return uri.build_host(api._context);
+};
+
+/*
  *  Setting the Sign-In related parameters
  *  
  *  This can be done one time at the beginning of a session
