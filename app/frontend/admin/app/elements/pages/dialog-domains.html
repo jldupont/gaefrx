@@ -1,0 +1,65 @@
+<!--
+  Domains Management
+  @author: jldupont
+  @dependencies:  api
+-->
+
+<dom-module id="dialog-domain-add">
+  <template>
+  
+  	<style>
+  	  #dialog {
+  	  	background: white;
+  	  };
+  	</style>
+  
+	<paper-dialog modal id='dialog'>
+	  <h2 class='vertical layout center'>Add Domain</h2>
+		<div class="vertical-section">
+    		<paper-input domainName label="Domain Name"></paper-input>
+    	</div>
+	    	
+	  <div class="buttons vertical layout center">
+	  	<div>
+		    <paper-button dialog-dismiss raised>Cancel</paper-button>
+		    <paper-button dialog-confirm raised>Accept</paper-button>
+	    </div>
+	  </div>
+	</paper-dialog>
+  
+  
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'dialog-domain-add',
+      
+      properties: {
+    	  
+      },
+      
+      open: function(){
+    	  this.$.dialog.open();
+      },
+      
+      ready: function(){
+    	  
+    	  var elDomainName = this.$$("#dialog [domainName]");
+    	  
+    	  this.$$("#dialog [dialog-confirm]").addEventListener('click', function(){
+    		
+    		var domainName = elDomainName.value;
+    		
+    		mbus.publish("intent-domain-create", {
+    			name: domainName 
+			});
+    		
+    	  });//click
+    	  
+      },//ready
+      
+      
+    });
+  })();
+</script>

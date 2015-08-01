@@ -11,8 +11,20 @@
       
       properties: {
     	
+    	  debug: {
+    		  type: Boolean
+    		  ,value: false
+    	  }
     	  
       }, //properties
+      
+      publish: function(type, details){
+    	  
+    	  if (this.debug)
+    	  	console.log("** Publishing: type("+type+") details: ", details);
+    	  
+    	  this.fire(type, details);
+      },
       
       subscribe: function(message_type, callback) {
     	  

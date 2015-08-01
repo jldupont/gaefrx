@@ -4,17 +4,27 @@
   @dependencies:  api
 -->
 
+<link rel="import" href="dialog-domains.html">
+
 <dom-module id="page-domains">
   <template>
   
-	<paper-icon-button class='red' icon="add-circle"><paper-icon-button>
+  	<style>
+  	 #button_add {
+  	 	color: #db4437;
+  	 };
+  	</style>
+  
+	<paper-icon-button id="button_add" icon="add-circle"
+	title='add domain'
+	data-required-permission="domain:create"
+	><paper-icon-button>
   
   	<iron-ajax is='dom-bind' id='ajaxdomains'
   		handle-as="json"
   		url="/_api/domain"
   		on-response ="_handleResponse"
-  	>
-  	</iron-ajax>
+  	></iron-ajax>
   
   </template>
 </dom-module>
@@ -48,8 +58,32 @@
     	  console.log(response);
       },
       
+      start_add_domain : function(){
+    	  document.querySelector("#dialogAddDomain").open();  
+      },
+      
       ready: function(){
-    	  
+    	var self = this;
+    	
+    	this.$.button_add.addEventListener("click", function(){
+    		self.start_add_domain();	
+    	});
+    	
+    	mbus.subscribe("intent-domain-create", function(details){
+    		
+    		//console.log("Intent: domain add: ", details);
+    		
+    		details.cb_success = function(){
+    			console.log("Created!");
+    		};
+    		details.cb_error = function(e){
+    			console.log("Error! ", e);
+    		};
+    		api.domain_create(details);
+    		
+    	});
+    	
+    	
       },
       
     });

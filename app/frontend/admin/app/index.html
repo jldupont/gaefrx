@@ -47,19 +47,17 @@
 
 <body unresolved class="fullbleed layout vertical">
 
-                <paper-dialog id='testdialog' no-cancel-on-esc-key with-backdrop no-cancel-on-outside-click>
-                	<h2>Heading</h2>
-  					<p>Some content</p>
-  					<div class="buttons">
-						<paper-button dialog-dismiss>Cancel</paper-button>
-        				<paper-button dialog-confirm>Accept</paper-button>  					
-        			</div>
-				</paper-dialog>
-
   <gaefrx-bus id='mbus' is='dom-bind'></gaefrx-bus>
   
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
+
+	<!--
+		Dialogs must be outside paper-drawer-panel
+		 because of z-order bug 
+	-->
+	<dialog-domain-add id="dialogAddDomain"></dialog-domain-add> 
+
 
     <paper-drawer-panel id="paperDrawerPanel">
       <div drawer>

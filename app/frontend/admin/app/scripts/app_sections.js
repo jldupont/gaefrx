@@ -24,6 +24,8 @@
 		  var required_permission = section.getAttribute('data-required-permission');
 		  var result = rbac.ensure(current_user, required_permission);
 		  
+		  section.setAttribute("permission", result);
+		  
 		  //console.log("Section: ", section);
 		  
 		  if (api.get_option('debug'))
