@@ -10,8 +10,9 @@
 	<paper-icon-button class='red' icon="add-circle"><paper-icon-button>
   
   	<iron-ajax is='dom-bind' id='ajaxdomains'
-  		
+  		handle-as="json"
   		url="/_api/domain"
+  		on-response ="_handleResponse"
   	>
   	</iron-ajax>
   
@@ -26,21 +27,25 @@
     	  
       },
       
-      init: function(){
+      init_api: function(scheme_host_port, headers){
 
     	this.ajax_domains = this.$.ajaxdomains;
-    	
+
+    	// iron-ajax builds a full URL
+    	//  but we just want the 'path' part
     	var uri_parts = uri.parse(this.ajax_domains.url);
-    	
     	var url_path = uri_parts.path;
     	
-    	var host = api.get_host_and_port();
-    	
-    	var url = host + "/" + url_path;
+    	var url = scheme_host_port + "/" + url_path;
     	
     	this.ajax_domains.url = url;
     	this.ajax_domains.auto = true;
-    	  
+    	this.ajax_domains.headers = headers;  
+      },
+      
+      _handleResponse: function(event){
+    	  var response = event.detail.response;
+    	  console.log(response);
       },
       
       ready: function(){

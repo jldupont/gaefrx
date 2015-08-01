@@ -6,6 +6,7 @@
 (function(document){
 	'use strict';
 
+	var page_domains = null;
 	
 	var setup = function(){
 		
@@ -17,7 +18,16 @@
 		
 	};//setup
 	
+	mbus.subscribe("X-user", function(_details){
+		
+		var scheme_host_port = api.get_scheme_host_and_port();
+		page_domains = document.body.querySelector("page-domains");
+		
+		var headers = api.get_headers();
+		page_domains.init_api(scheme_host_port, headers);
+	});
 	
+	  
 	app.addEventListener('dom-change', function() {
 		setup();
 	});

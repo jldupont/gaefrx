@@ -54,10 +54,14 @@ api.init = function(){
 	api._context.base = "_api/";
 };
 
+api.get_context = function(){
+	return api._context;
+};
+
 /*
  *  Return scheme://host[:port]/
  */
-api.get_host_and_port = function() {
+api.get_scheme_host_and_port = function() {
 	return uri.build_host(api._context);
 };
 
@@ -116,6 +120,14 @@ api.get_option = function(option_name) {
 	return value;
 };
 
+api.get_headers = function() {
+	return {
+		'Content-Type': 'application/json',
+		'From':         api._current_signin.email || null,
+		'X-realm':      api._current_signin.realm || null,
+		'X-token':      api._current_signin.token || null
+	};
+};
 
 //-------------------------------------------------------- PRIVATE functions
 
@@ -148,12 +160,7 @@ api.request = function(context){
 	
 	context.url = uri.build(rcontext);
 	
-	context.headers = {
-		'Content-Type': 'application/json',
-		'From':         api._current_signin.email || null,
-		'X-realm':      api._current_signin.realm || null,
-		'X-token':      api._current_signin.token || null
-	};
+	context.headers = api.get_headers(); 
 	
 	return api._make_request(context);
 };
