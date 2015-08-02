@@ -5,6 +5,7 @@
 -->
 
 <link rel="import" href="dialog-domains.html">
+<link rel="import" href="../ui/simple-list.html">
 
 <dom-module id="page-domains">
   <template>
@@ -13,14 +14,18 @@
   	 #button_add {
   	 	color: #db4437;
   	 };
+  	 simple-list {
+  	 };
   	</style>
   
 	<paper-icon-button id="button_add" icon="add-circle"
 	title='add domain'
 	data-required-permission="domain:create"
-	><paper-icon-button>
+	></paper-icon-button>
   
-  	<iron-ajax is='dom-bind' id='ajaxdomains'
+  	<simple-list id='domains_list'></simple-list>
+  
+  	<iron-ajax id='ajaxdomains'
   		handle-as="json"
   		url="/_api/domain"
   		on-response ="_handleResponse"
@@ -55,7 +60,11 @@
       
       _handleResponse: function(event){
     	  var response = event.detail.response;
-    	  console.log(response);
+    	  var domains = response.domains || [];
+
+    	  //console.log("Domains: ", domains);
+    	  
+    	  this.$.domains_list.insert(domains);
       },
       
       start_add_domain : function(){

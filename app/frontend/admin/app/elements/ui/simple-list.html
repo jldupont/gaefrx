@@ -1,0 +1,58 @@
+<!--
+  Simple List
+  
+  This element is really just a short-term fix 
+   awaiting a real data-table solution. 
+   
+  See roadmap : https://github.com/PolymerElements/paper-elements 
+  
+  @author: jldupont
+  
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="simple-list">
+  <template>
+  	<ul>
+  		<template is="dom-repeat" items="{{list}}">
+  			<li>{{item.name}}</li>
+  		</template>
+  	</ul>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'simple-list',
+      
+      properties: {
+
+	   	  list: {
+	   		  type: Array
+	   		  ,value: []
+    			//,notify: true
+	   	  }
+		,
+		
+      },
+
+      insert: function(data_list) {
+    	  
+    	  this.list = this.list.concat(data_list);
+      },
+      
+      clear: function(){
+    	  this.list = [];
+      },
+      
+      _refresh: function(){
+    	  
+      },
+      
+      ready: function(){
+      },//ready
+      
+    });
+  })();
+</script>
