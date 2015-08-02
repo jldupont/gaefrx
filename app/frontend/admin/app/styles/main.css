@@ -13,3 +13,14 @@ body {
   color: #333;
 }
 
+paper-toast {
+   z-index: 1000;
+   bottom: 40px;
+   left: 10px;
+}
+
+paper-toast.warning {
+	background: yellow;
+	color: red;
+	font-weight: bold;
+}

@@ -59,6 +59,10 @@
 	<dialog-domain-add id="dialogAddDomain"></dialog-domain-add> 
 
 
+	<!--
+		CONTENT 
+	-->
+
     <paper-drawer-panel id="paperDrawerPanel">
       <div drawer>
 
@@ -155,6 +159,25 @@
             </section>
 
           </iron-pages>
+          
+			<!--
+				Message toasts 
+			-->
+			<msg-toast></msg-toast>
+			
+			<paper-toast 
+			id='toast-success'
+			duration=3000
+			text="Success"
+			></paper-toast>
+
+			<paper-toast class='warning'
+			id='toast-exist'
+			duration=3000
+			text="Resource Exists"
+			></paper-toast>
+		
+          
         </div>
       </paper-header-panel>
     </paper-drawer-panel>

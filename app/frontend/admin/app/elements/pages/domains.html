@@ -74,11 +74,16 @@
     		//console.log("Intent: domain add: ", details);
     		
     		details.cb_success = function(){
-    			console.log("Created!");
+    			mbus.publish("R-success");
     		};
-    		details.cb_error = function(e){
-    			console.log("Error! ", e);
+    		details.cb_error = function(context, status, response){
+    			
+    			var eclass = (response.eclass || "").toLowerCase();
+
+    			if (eclass=='existserror')
+    				mbus.publish("R-exists:resource", {name: 'domain'});
     		};
+    		
     		api.domain_create(details);
     		
     	});

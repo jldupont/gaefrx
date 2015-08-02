@@ -1,0 +1,41 @@
+<!--
+  Messages Management
+  @author: jldupont
+  @dependency: mbus
+-->
+
+
+<script>
+  (function() {
+    Polymer({
+      is: 'msg-toast',
+      
+      properties: {
+    	  
+      },
+      
+      _show_toast: function(toast_id){
+    	  
+    	  var toastEl = document.getElementById(toast_id);
+    	  toastEl.show();
+    	  
+      },
+      
+      ready: function(){
+    	  
+    	var self = this;
+    	
+    	mbus.subscribe("R-success", function(details){
+    		self._show_toast("toast-success");
+    	});
+    	
+    	mbus.subscribe("R-exists:resource", function(details){
+    		self._show_toast("toast-exist");
+    	});
+    	
+    	
+      },//ready
+      
+    });
+  })();
+</script>
