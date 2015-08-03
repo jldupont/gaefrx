@@ -4,6 +4,8 @@
   @dependencies:  api
 -->
 
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
 <link rel="import" href="dialog-domains.html">
 <link rel="import" href="../ui/simple-list.html">
 
@@ -11,21 +13,26 @@
   <template>
   
   	<style>
+
   	 #button_add {
-  	 	color: #db4437;
-  	 };
-  	 simple-list {
+  	 	position: absolute;
+  	 	right: 5px;
   	 };
   	</style>
   
-	<paper-icon-button id="button_add" icon="add-circle"
+   <paper-fab
+   	id="button_add" 
+	icon="add" mini
 	title='add domain'
 	data-required-permission="domain:create"
-	></paper-icon-button>
+   ></paper-fab>
   
-  	<simple-list id='domains_list'></simple-list>
+	<simple-list 
+	id='domains_list'
+  	></simple-list>
   
-  	<iron-ajax id='ajaxdomains'
+  	<iron-ajax 
+  		id='ajaxdomains'
   		handle-as="json"
   		url="/_api/domain"
   		on-response ="_handleResponse"
