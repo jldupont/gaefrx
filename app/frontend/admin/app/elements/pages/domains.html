@@ -85,12 +85,20 @@
     		self.start_add_domain();	
     	});
     	
+    	mbus.subscribe("domain-created", function(domain_details) {
+    		self.$.domains_list.insert(domain_details);
+    	});
+    	
     	mbus.subscribe("intent-domain-create", function(details){
     		
     		//console.log("Intent: domain add: ", details);
     		
-    		details.cb_success = function(){
+    		details.cb_success = function(_context, _status, response){
+    			
+    			//console.log("Domain created: ", response);
+    			
     			mbus.publish("R-success");
+    			mbus.publish("domain-created", response);
     		};
     		details.cb_error = function(context, status, response){
     			
