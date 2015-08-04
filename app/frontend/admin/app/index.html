@@ -84,6 +84,11 @@
                 <span>Domains</span>
               </a>
 
+              <a data-route="domain" href="/domain" data-required-permission="domain:read" hidden>
+                <iron-icon icon="cloud"></iron-icon>
+                <span>Domain</span>
+              </a>
+
               <a data-route="users" href="/users" data-required-permission="users:list" hidden>
                 <iron-icon icon="account-box"></iron-icon>
                 <span>Users</span>
@@ -155,6 +160,13 @@
             			data-required-permission="domain:list">
               <paper-material elevation="1">
               	<page-domains></page-domains>
+              </paper-material>
+            </section>
+
+            <section data-route="domain" 
+            			data-required-permission="domain:read">
+              <paper-material elevation="1">
+              	
               </paper-material>
             </section>
 

@@ -42,6 +42,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       mbus.fire("X-section", 'domains');
     });
 
+    page('/domain/:domain', function (ctx) {
+        app.route = 'domain';
+        mbus.fire("X-section", 'domain');
+      });
+    
 
     // add #! before urls
     page({
