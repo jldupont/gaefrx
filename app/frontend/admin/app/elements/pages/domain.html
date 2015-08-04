@@ -1,0 +1,54 @@
+<!--
+  Domain Management
+  @author: jldupont
+  @dependencies:  api
+-->
+
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+
+<dom-module id="page-domain">
+  <template>
+  
+  	<style>
+
+  	 #button_edit {
+  	 	position: absolute;
+  	 	right: 5px;
+  	 };
+  	</style>
+  
+   <paper-fab
+   	id="button_edit" 
+	icon="create" mini
+	title='edit domain'
+	data-required-permission="domain:update"
+   ></paper-fab>
+  
+  
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'page-domain',
+      
+      properties: {
+    	  
+      },
+      
+      
+      ready: function(){
+    	var self = this;
+    	
+    	this.$.button_edit.addEventListener("click", function(){
+	
+    	});
+    	
+    	
+    	
+      },//ready
+      
+    });
+  })();
+</script>
