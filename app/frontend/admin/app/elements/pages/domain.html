@@ -15,7 +15,7 @@
   	 #button_edit {
   	 	position: absolute;
   	 	right: 5px;
-  	 };
+  	 }
   	</style>
   
    <paper-fab
@@ -34,12 +34,19 @@
       is: 'page-domain',
       
       properties: {
-    	  
+      	domain: {
+    		type: String,
+    		value: null
+    	}      	  
       },
       
       
       ready: function(){
     	var self = this;
+    	
+    	mbus.subscribe("X-domain-selected", function(data){
+    		console.log(data);
+    	});
     	
     	this.$.button_edit.addEventListener("click", function(){
 	

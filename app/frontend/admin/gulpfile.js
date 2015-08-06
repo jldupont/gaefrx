@@ -65,7 +65,7 @@ gulp.task('jshint', function () {
     ])
     .pipe(reload({stream: true, once: true}))
     .pipe($.jshint.extract()) // Extract JS from .html files
-    .pipe($.jshint())
+    .pipe($.jshint({laxcomma: true}))
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });

@@ -202,7 +202,15 @@ api._make_request = function(context) {
     xhr.addEventListener('readystatechange', function () {
     	
         if (xhr.readyState === 4) {
-        	var response_object = JSON.parse(xhr.responseText);
+        	
+        	var response_object = null;
+        	
+        	try {
+        		response_object = JSON.parse(xhr.responseText);	
+        	} catch(_e) {
+        		do_callback(context.cb_exception, 0, {eclass: 'FormatError'});
+        		return;
+        	}
         	
         	if ((xhr.status>=200) && (xhr.status<300)) {
         		do_callback(context.cb_success, xhr.status, response_object);
