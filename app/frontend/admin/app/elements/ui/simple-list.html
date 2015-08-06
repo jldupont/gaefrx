@@ -11,12 +11,13 @@
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="tpl-anchor.html">
 
 <dom-module id="simple-list">
   <template>
   	<ul>
   		<template is="dom-repeat" items="{{list}}">
-  			<li>{{item.name}}</li>
+  			<li><a is="tpl-anchor" href="/domain/" trail$="{{item.name}}">{{item.name}}</a></li>
   		</template>
   	</ul>
   </template>
@@ -44,14 +45,8 @@
       clear: function(){
     	  this.list = [];
       },
-      
-      _refresh: function(){
-    	  
-      },
-      
-      ready: function(){
-      },//ready
-      
+ 
+        
     });
   })();
 </script>

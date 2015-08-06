@@ -1,0 +1,42 @@
+<!--
+  Template Anchor
+  
+ 
+  @author: jldupont
+  
+  Usage:
+  ------
+  
+  This element is an helper to circumvent the limitations of 
+   Polymer 1.0 template engine.
+  
+  <a is="tpl-anchor" href="some_href" trail="trail_to_add_to_href"></a>
+  
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<script>
+  (function() {
+    Polymer({
+    	
+      is: 'tpl-anchor',
+      extends: 'a',
+      
+      properties: {
+    	  
+	   	  trail: {
+	   		  type: String,
+	   		  value: '',
+	   		  observer: '_adjust_path'
+	   	  }
+		
+      },
+
+      _adjust_path: function(){
+    	  this.setAttribute('href', this.href + this.trail);
+      },
+      
+    });
+  })();
+</script>
